@@ -1,25 +1,6 @@
 :root {
     /* Declaración de variables globales */
-    /* --color-fondo-principal: #001621;
-    --color-fondo-secundario: #062a34;
-    --color-fondo-secundario-hover: #0a3547;
     
-    --color-texto-principal: #f4f8fa;
-    --color-texto-secundario: #a9bbc3;
-    --color-texto-oscuro: #607984;
-
-    --color-principal: #f5b942;
-    --color-principal-hover: #ffd166;
-    --color-principal-oscuro: #c58506;
-
-    --color-negro: #000;
-
-    --color-exito: #35c759;
-    --color-fondo-mensaje-exito: #5df884a6;
-
-    --color-error: #ff5c5c;
-    --color-fondo-mensaje-error: #f57f7fbb; */
-
     /* 60% - fondo general: teal muy oscuro, casi negro con personalidad */
     --color-bg: #002A32;
 
