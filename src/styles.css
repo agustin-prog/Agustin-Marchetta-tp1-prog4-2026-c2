@@ -1,6 +1,6 @@
 :root {
     /* Declaración de variables globales */
-    --color-fondo-principal: #001621;
+    /* --color-fondo-principal: #001621;
     --color-fondo-secundario: #062a34;
     --color-fondo-secundario-hover: #0a3547;
     
@@ -18,9 +18,69 @@
     --color-fondo-mensaje-exito: #5df884a6;
 
     --color-error: #ff5c5c;
-    --color-fondo-mensaje-error: #f57f7fbb;
+    --color-fondo-mensaje-error: #f57f7fbb; */
 
-    --fuente-pincipal: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    /* 60% - fondo general: teal muy oscuro, casi negro con personalidad */
+    --color-bg: #002A32;
+
+    /* 30% - superficies (cards, header): una versión un poco más clara del fondo */
+    --color-superficie: #0A3A44;
+    --color-superficie-2: #114654;   /* hover en cards, zonas internas */
+
+    /* Textos */
+    --color-texto: #EFE8DE;          /* tu crema, en vez de blanco puro: más elegante */
+    --color-texto-sec: #9FB8BC;      /* versión lavada del teal para subtítulos */
+
+    /* 10% - acento principal: tu rojo coral. Solo botones, precios, seleccionado */
+    --color-acento: #ED354E;
+    --color-acento-hover: #C92640;   /* versión más oscura para hover */
+
+    /* Color secundario de apoyo: el azul, para info neutral (badges, links) */
+    --color-info: #1664B0;
+
+    /* Detalles puntuales del dominio */
+    --color-vip: #FEDD16;            /* dorado tu amarillo: butacas VIP, membresías */
+    --color-accesible: #4FA3FF;      /* accesibilidad (mantengo azul claro, es la convención universal del signo) */
+
+    /* forma */
+    --radio-sm: 6px;
+    --radio-md: 12px;
+    --radio-full: 999px;
+    --font: tanker, impact, verdana;   /* Estilos de los textos simples */
+
+    --fuente-disclaimer: Disclaimer-classic;
+
+    --fuente-nortune: Nortune;
+
+    --fuente-tanker: Tanker;
+}
+
+@font-face {
+  font-family: 'Disclaimer-classic';
+  src: url('/fonts/Disclaimer-Classic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Disclaimer-plain';
+  src: url('/fonts/Disclaimer-Plain.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nortune';
+  src: url('/fonts/Nortune-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Tanker';
+  src: url('/fonts/Tanker-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /*Reseteo del Box Sizing */
@@ -30,7 +90,7 @@
 
 /* Configuración para el elemento raíz */
 html {
-  font-family: var(--fuente-pincipal) ;
+  font-family: var(--font);
   font-size: 16px; /* Base para usar 'rem' correctamente */
   line-height: 1.5; /* Mejora la legibilidad del texto automáticamente */
   scroll-behavior: smooth; /* Desplazamiento suave al navegar por anclas */
@@ -38,13 +98,14 @@ html {
 
 /* Tu body mejorado con tipografía fluida y control de desborde */
 body {
-  background-color: var(--color-fondo-principal);
-  color: var(--color-texto-principal);
+  background-color: var(--color-bg);
+  color: var(--color-texto);
   margin: 0;
   min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla alta */
   text-rendering: optimizeLegibility;
 }
 
+/* Quita la scrollbar de los navegadores */
 html, body {
   scrollbar-width: none;
   -ms-overflow-style: none;
