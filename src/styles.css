@@ -77,7 +77,7 @@ html {
   scroll-behavior: smooth; /* Desplazamiento suave al navegar por anclas */
 }
 
-/* Tu body mejorado con tipografía fluida y control de desborde */
+/* Body mejorado con tipografía fluida y control de desborde */
 body {
   background-color: var(--color-bg);
   color: var(--color-texto);
