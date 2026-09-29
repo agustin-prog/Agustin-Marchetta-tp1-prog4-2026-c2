@@ -1,19 +1,26 @@
-<article>
+<article class="card">
     <img [src]="pelicula().imagenURL" [alt]="pelicula().nombre"/>
 
     <div class="body">
 
         <h3>{{ pelicula().nombre }}</h3>
 
-        <p class="meta">
-            <!-- <span class="badge">{{ pelicula().formato }}</span>
-            <span class="badge">{{ pelicula().idioma }}</span> -->
+        <div class="meta">
 
-            @if (pelicula().restriccionEdad !== "ninguna"){
-                <span class="badge restriccion">{{ pelicula().restriccionEdad }}</span>
-            }
-        </p>
+            <div>
+                @if (pelicula().restriccionEdad !== "ninguna"){
+                    <span class="badge restriccion">{{ pelicula().restriccionEdad }}</span>
+                }@else {
+                    <span class="badge"></span>
+                }
+            </div>
 
-        <p class="generos">{{ pelicula().generos.map((g) => g.nombre ).join(", ") }}</p>
+            <div>
+
+                <p class="generos">{{ pelicula().generos.map((g) => g.nombre ).join(", ") }}</p>
+            </div>
+        </div>
+
+        <!-- <p class="generos">{{ pelicula().generos.map((g) => g.nombre ).join(", ") }}</p> -->
     </div>
 </article>

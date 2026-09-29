@@ -1,11 +1,12 @@
 .card {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--color-superficie-2);
+    border-radius: var(--radio-sm);
     overflow: hidden;
     font-family: system-ui, sans-serif;
-    max-width: 220px;
+    max-width: 9.38rem;
+    background-color: var(--color-superficie);
 }
 
 .card img {
@@ -14,28 +15,34 @@
 }
 
 .body {
-    padding: 0.5rem 0.75rem;
+    padding: 0.8rem 0.75rem;
+    height: 10rem;
+}
+
+.body h3 {
+    font-size: 1.06rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .meta {
     display: flex;
-    gap: 0.35rem;
     flex-wrap: wrap;
 }
 
 .badge {
-    background-color: #eee;
     border-radius: 4px;
     padding: 0.1rem 0.4rem;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .badge.restriccion {
-    background: #fdecea;
-    color: #c62828;
+    background: var(--color-texto);
+    color: var(--color-acento);
 }
 
 .generos {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--color-texto-sec);
 }
