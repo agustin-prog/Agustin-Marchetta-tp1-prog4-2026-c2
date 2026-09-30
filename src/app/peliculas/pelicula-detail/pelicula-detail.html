@@ -1,36 +1,94 @@
 @if (pelicula(); as p) {
     <div class="ficha">
-
         <img [src]="p.imagenURL" [alt]="p.nombre" />
 
-        <div class="datos">
+        <div class="encabezado">
 
             <h2>{{ p.nombre }}</h2>
-
+            
             <p class="meta">
-
-                <!-- <span class="badge">{{ p.formato }}</span>
-                <span class="badge">{{ p.idioma }}</span> -->
                 <span class="badge">{{ p.duracionMinutos }} minutos</span>
-
+    
                 @if (p.restriccionEdad !== "ninguna") {
                     <span class="badge restriccion">{{ p.restriccionEdad }}</span>
                 }
             </p>
+        </div>
+
+        <div class="datos">
 
             <p class="generos">{{ p.generos.map((g) => g.nombre ).join(", ") }}</p>
 
             <p class="sinopsis">{{ p.sinopsis }}</p>
 
-            <!-- Aca irian las funciones disponibles y reseñas -->
-            <p class="pendientes">Funciones disponibles y reseñas</p>
-
-            <a routerLink="/peliculas">Volver a la cartelera</a>
-
         </div>
     </div>
+
+    <section class="funciones">
+
+        <h3>Funciones disponibles</h3>
+
+        @let lista = funciones();
+
+        @if (fechasDisponibles().length > 0) {
+            <div class="fechas-bar">
+                @for (timestamp of fechasDisponibles(); track timestamp) {
+                    @let esSeleccionado = fechaSeleccionada()?.getTime() === timestamp;
+
+                    <button
+                        type="button"
+                        class="chip"
+                        [class.selected]="esSeleccionado"
+                        (click)="elegirFecha(timestamp)"
+                    >
+                        {{ timestamp | date:'EEE d MMM' }}
+                    </button>
+                }
+            </div>
+        }
+
+        @if (lista && lista.length > 0) {
+            <div class="funciones-grid">
+                @for (f of lista; track f.id) {
+                    <article class="funcion-card">
+
+                        <div class="funcion-fecha">
+                            <span class="dia">{{ f.fechaHoraInicio | date:'EEE d MMM' }}</span>
+                            <span class="horario">{{ f.fechaHoraInicio | date:'HH:mm' }} hs</span>
+                        </div>
+
+                        <div class="funcion-info">
+                            <p class="meta">
+                                <span class="badge">{{ f.formato }}</span>
+
+                                <span class="badge">{{ f.idioma }}</span>
+
+                                @if (f.esPreventa) {
+                                    <span class="badge preventa">Preventa</span>
+                                }
+                            </p>
+
+                            <p class="precio">{{ f.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</p>
+                        </div>
+
+                        <button type="button" class="btn-seleccionar">
+                            Elegir butacas
+                        </button>
+
+                    </article>
+                }
+            </div>
+        } @else {
+            <p class="sin-funciones">No hay funciones programadas para esta película.</p>
+        }
+
+        <!-- Aca iran las reseñas -->
+    </section>
+
+    <a class="btn-volver" routerLink="/peliculas">Volver a la cartelera</a>
+
 } @else {
     <p class="not-found">Película no encontrada</p>
 
-    <a routerLink="/peliculas">Volver a la cartelera</a>
+    <a class="btn-volver" routerLink="/peliculas">Volver a la cartelera</a>
 }
