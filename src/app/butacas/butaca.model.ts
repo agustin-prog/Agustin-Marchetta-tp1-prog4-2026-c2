@@ -1,11 +1,19 @@
 export type TipoButaca = 'normal' | 'accesible' | 'VIP';
 
 export interface ButacaModel {
-    id: string;
+    id: number;
+    salaId: number;
     letraFila: string;
     numero: number;
-    fila: number;
-    columna: number;
+    sector: number;
+    tipo: TipoButaca;
+}
+
+export interface ButacaPayload {
+    salaId: number;
+    letraFila: string;
+    numero: number;
+    sector: number;
     tipo: TipoButaca;
 }
 

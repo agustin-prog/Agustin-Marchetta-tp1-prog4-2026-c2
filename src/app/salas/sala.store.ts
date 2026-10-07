@@ -1,41 +1,99 @@
 import { Injectable, signal } from "@angular/core";
-import { SalaDraft, SalaModel } from "./sala.model";
-import { generarButacas } from "../butacas/butaca-generador";
+import { supabase } from "../supabase.client";
+import { SalaModel, SalaPatch } from "./sala.model";
 
+export interface SalaRow {
+    id: number;
+    nombre: string;
+}
 
 @Injectable({ providedIn: "root"})
 export class SalaStore {
     
-    readonly salas = signal<SalaModel[]>([
-        {
-            id: 1,
-            nombreSala: "sala01",
-            matrizButacas: generarButacas(),
-        },
-        {
-            id: 2,
-            nombreSala: "sala02",
-            matrizButacas: generarButacas(),
-        },
-    ]);
+    private readonly db = supabase;
+    readonly salas = signal<SalaModel[]>([]);
+    readonly loading = signal(true);
 
+    private yaInicializado = false;
+
+    init() {
+
+        if(this.yaInicializado) return; // guard
+        this.yaInicializado = true;
+
+        this.load();
+        this.db
+        .channel("salas-changes")
+        .on("postgres_changes",
+            { event: "*", schema: "public", table: "salas" },
+            () => this.load()  
+        )
+        .subscribe();
+    }
+
+    async load(): Promise<void> {
+        try {
+            const { data, error } = await this.db
+            .from("salas")
+            .select("*")
+            .order("id");
     
+            if (error) throw error;
+    
+            this.salas.set((data ?? []));
+
+        } finally {
+            this.loading.set(false);
+        }
+    }
+
+    async add(nombre: string): Promise<void> {
+        const { error } = await this.db
+          .from("salas")
+          .insert({
+            nombre: nombre
+          });
+    
+        if (error) throw error;
+        
+        await this.load();
+    }
+
+    async update( id:number, patch: SalaPatch): Promise<void> {
+        
+        const {error} = await this.db
+        .from("salas")
+        .update({
+            ...(patch.nombreSala !== undefined && { nombre: patch.nombreSala }),
+            })
+        .eq("id", id);
+    
+        if(error) throw error;
+    
+        await this.load();
+    }
+
+    async remove( id:number): Promise<void> {
+    
+        const {data, error} = await this.db
+        .from("salas")
+        .delete()
+        .eq("id", id);
+    
+        if(error) throw error;
+    
+        this.salas.set((data ?? []).map((row: SalaRow) => this.mapear(row)));
+        await this.load();
+    }
+
     find(id: number): SalaModel | undefined {
-        return this.salas().find((p) => Number(p.id) === Number(id));
+        return this.salas().find((s) => Number(s.id) === Number(id));
     }
 
-    add(draft: SalaDraft): SalaModel {
-        const id = Math.max(0, ...this.salas().map((p) => p.id)) + 1;
-        const pelicula: SalaModel = {id, ...draft};
-        this.salas.update((list) => [...list, pelicula]);
-        return pelicula;
-    }
-
-    update(id: number, patch: SalaModel): void {
-        this.salas.update((list) => list.map((p) => (p.id === id ? {...p, ...patch} : p)));
-    }
-
-    remove(id: number): void {
-        this.salas.update((list) => list.filter((p) => p.id !== id));
+    private mapear(row: SalaRow): SalaModel {
+        return { 
+            id: row.id, 
+            nombreSala: row.nombre 
+        };
     }
 }

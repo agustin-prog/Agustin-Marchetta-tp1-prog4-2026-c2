@@ -1,58 +1,50 @@
-import { ButacaModel, TipoButaca } from "./butaca.model";
+import { ButacaModel, ButacaPayload, TipoButaca } from "./butaca.model";
 
-export function generarButacas(): ButacaModel[][][] {
+const FILAS = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T"];
 
-    const mapaTemporal: ButacaModel[][][] = [];
-    const letrasFilas = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T"];
+/* funcion que permite generar la matriz de butacas para ser guardada en la BD */
+export function generarButacas(salaId: number): ButacaPayload[] {
 
-    for (let f = 0; f < letrasFilas.length; f++){
+    const butacas: ButacaPayload[] = [];
 
-        let tipoButaca : TipoButaca
-        const letraFila = letrasFilas[f];
-
-        let cantSector1 = 4;
-        let cantSector2 = 20;
-        let cantSector3 = 4;
-        tipoButaca = "normal"
+    FILAS.forEach((letraFila) => {
+        let cantSector1 = 4, cantSector2 = 20, cantSector3 = 4;
+        let tipoButaca: TipoButaca = "normal";
 
         if (letraFila === "J" || letraFila === "K") {
-            cantSector1 = 2;
-            cantSector2 = 10;
-            cantSector3 = 2;
-            tipoButaca = "accesible"
+            cantSector1 = 2; cantSector2 = 10; cantSector3 = 2;
+            tipoButaca = "accesible";
+        }
+        if (letraFila === "R" || letraFila === "S" || letraFila === "T") {
+            tipoButaca = "VIP";
         }
 
-        if (letraFila === "R" || letraFila === "S" || letraFila === "T"){
-            tipoButaca = "VIP"
-        }
-
-        const distribucionSectores = [cantSector1, cantSector2, cantSector3];
-        const filaActual: ButacaModel[][] = [];
-
-        for (let s = 0; s < distribucionSectores.length; s++) {
-
-            const cantidadButacas = distribucionSectores[s];
-            const sectorActual: ButacaModel[] = [];
-
-            for (let b = 1; b <= cantidadButacas; b++) {
-
-                const idButaca = `${letraFila}-S${s + 1}-${b}`;
-
-                sectorActual.push({
-                    id: idButaca,
-                    letraFila: letraFila,
+        [cantSector1, cantSector2, cantSector3].forEach((cantidad, s) => {
+            for (let b = 1; b <= cantidad; b++) {
+                butacas.push({
+                    salaId,
+                    letraFila,
                     numero: b,
-                    fila: f,
-                    columna: b,
+                    sector: s + 1,
                     tipo: tipoButaca,
                 });
             }
+        });
+    });
 
-            filaActual.push(sectorActual);
-        }
+    return butacas;
+}
 
-        mapaTemporal.push(filaActual);
-    }
+/* funcion que permite renderizar la matriz */
+export function construirMatriz(butacas: ButacaModel[]): ButacaModel[][][] {
+    return FILAS.map((letra) => {
+        const sectores: ButacaModel[][] = [[], [], []];
 
-    return mapaTemporal;
+        butacas
+            .filter(b => b.letraFila === letra)
+            .sort((a, b) => a.sector - b.sector || a.numero - b.numero)
+            .forEach(b => sectores[b.sector - 1].push(b));
+
+        return sectores;
+    });
 }

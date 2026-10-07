@@ -2,7 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PeliculaCard } from '../pelicula-card/pelicula-card';
 import { GeneroModel } from '../../generos/genero.model';
-import { PeliculasStoreService } from '../pelicula-store.service';
+import { PeliculaStore } from '../pelicula.store';
+import { ButacaStore } from '../../butacas/butaca.store';
 
 @Component({
   imports: [RouterLink, PeliculaCard],
@@ -11,8 +12,9 @@ import { PeliculasStoreService } from '../pelicula-store.service';
   templateUrl: './pelicula-list.html',
 })
 export class PeliculaList {
-  /* private readonly storePeliculas = inject(PeliculaStore); */
-  private readonly storePeliculas = inject(PeliculasStoreService)
+
+  private readonly storeButacas = inject(ButacaStore);
+  private readonly storePeliculas = inject(PeliculaStore);
 
   /* dos signals de estado de UI: texto busqueda y géneros elegidos */
   texto = signal("");
@@ -54,6 +56,8 @@ export class PeliculaList {
 
   constructor() {
     this.storePeliculas.init();
+    this.storeButacas.add(1).catch(e => console.error("seed sala 1:", e.message));
+    this.storeButacas.add(2).catch(e => console.error("seed sala 2:", e.message));
   }
 
   /* Aca ira la logica para mostrar las peliculas mas vendidas */

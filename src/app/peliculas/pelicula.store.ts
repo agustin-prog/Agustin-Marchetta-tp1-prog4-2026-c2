@@ -1,96 +1,147 @@
-import { inject, Injectable, signal } from "@angular/core";
-import { PeliculaDraft, PeliculaModel } from "./pelicula.models";
-import { GeneroStore } from "../generos/genero.store";
+import { Injectable, signal } from "@angular/core";
+import { supabase } from "../supabase.client";
+import { PeliculaModel, PeliculaPayload, RestriccionEdad } from "./pelicula.model";
 import { GeneroModel } from "../generos/genero.model";
 
-@Injectable({ providedIn: "root"})
+// tipo crudo que devuelve la DB (snake_case + géneros anidados)
+export interface PeliculaRow {
+  id: number;
+  nombre: string;
+  sinopsis: string;
+  poster_url: string | null;
+  duracion_minutos: number;
+  restriccion_edad: RestriccionEdad;
+  fecha_estreno: string  | null;
+  preventa_habilitada: boolean;
+  precio_preventa: number | null;
+  pelicula_genero: { generos: GeneroModel }[];   // resultado del join
+}
+
+@Injectable({ providedIn: "root" })
 export class PeliculaStore {
 
-    private readonly generoStore = inject(GeneroStore);
+  private readonly db = supabase;
+  readonly peliculas = signal<PeliculaModel[]>([]);
+  readonly loading = signal(true);
 
-    /* Asignamos unos valores de prueba simulando que son las peliculas que estan en base de datos */
-    readonly peliculas = signal<PeliculaModel[]>([
-        {
-        id: 1,
-        nombre: "Dune: Part Two",
-        sinopsis: "Paul Atreides se une a los Fremen mientras busca vengarse de quienes destruyeron a su familia, enfrentándose a decisiones que pueden cambiar el destino del universo.",
-        imagenURL: "https://placehold.co/300x450?text=Dune%3A+Part+Two",
-        duracionMinutos: 166,
-        generos: this.mapearGeneros([3, 2, 4]),
-        restriccionEdad: "+13"
-    },
-    {
-        id: 2,
-        nombre: "The Substance",
-        sinopsis: "Una celebridad en decadencia utiliza una misteriosa sustancia que le permite crear una versión más joven de sí misma, con consecuencias inesperadas.",
-        imagenURL: "https://placehold.co/300x450?text=The+Substance",
-        duracionMinutos: 141,
-        generos: this.mapearGeneros([1, 3, 4]),
-        restriccionEdad: "+18"
-    },
-    {
-        id: 3,
-        nombre: "Superman",
-        sinopsis: "Clark Kent intenta equilibrar su herencia kryptoniana con su vida humana mientras defiende a la humanidad como Superman.",
-        imagenURL: "https://placehold.co/300x450?text=Superman",
-        duracionMinutos: 129,
-        generos: this.mapearGeneros([5, 2, 3]),
-        restriccionEdad: "+13"
-    },
-    {
-        id: 4,
-        nombre: "F1: The Movie",
-        sinopsis: "Un antiguo piloto de Fórmula 1 regresa a las pistas para ayudar a un joven piloto y enfrentarse nuevamente a los desafíos de las carreras profesionales.",
-        imagenURL: "https://placehold.co/300x450?text=F1%3A+The+Movie",
-        duracionMinutos: 155,
-        generos: this.mapearGeneros([5, 4, 6]),
-        restriccionEdad: "+13"
-    },
-    {
-        id: 5,
-        nombre: "Jurassic World: Rebirth",
-        sinopsis: "Un equipo de exploradores se aventura en una peligrosa región para investigar dinosaurios y recuperar material genético con un enorme valor científico.",
-        imagenURL: "https://placehold.co/300x450?text=Jurassic+World%3A+Rebirth",
-        duracionMinutos: 133,
-        generos: this.mapearGeneros([5, 2, 3]),
-        restriccionEdad: "+13"
-    },
-    {
-        id: 6,
-        nombre: "Mission: Impossible - The Final Reckoning",
-        sinopsis: "Ethan Hunt y su equipo se enfrentan a una nueva amenaza mientras intentan evitar que una poderosa inteligencia artificial caiga en las manos equivocadas.",
-        imagenURL: "https://placehold.co/300x450?text=Mission%3A+Impossible",
-        duracionMinutos: 169,
-        generos: this.mapearGeneros([5, 2, 7]),
-        restriccionEdad: "+13"
+  private yaInicializado = false;
+
+  init() {
+
+    if(this.yaInicializado) return; // guard
+    this.yaInicializado = true;
+
+    this.load();
+    this.db
+      .channel("peliculas-changes")
+      .on("postgres_changes",
+        { event: "*", schema: "public", table: "peliculas" },
+        () => this.load()  
+      )
+      .subscribe();
+  }
+
+  async load(): Promise<void> {
+    const { data, error } = await this.db
+      .from("peliculas")
+      .select("*, pelicula_genero(generos(id, nombre))")   // join con la tabla generos
+      .order("id");
+
+    if (error) throw error;
+
+    this.peliculas.set((data ?? []).map((row: PeliculaRow) => this.mapear(row)));
+    this.loading.set(false);
+  }
+
+  async add(payload: PeliculaPayload): Promise<void> {
+    const { data, error } = await this.db
+      .from("peliculas")
+      .insert({
+        nombre: payload.nombre,
+        sinopsis: payload.sinopsis,
+        duracion_minutos: payload.duracionMinutos,
+        restriccion_edad: payload.restriccionEdad,
+        preventa_habilitada: payload.preventaHabilitada,
+        poster_url: payload.posterUrl ?? null,
+        fecha_estreno: payload.fechaEstreno ?? null,
+        precio_preventa: payload.precioPreventa ?? null,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const relaciones = payload.generoIds.map(generoId => ({
+
+        pelicula_id: data.id,
+        genero_id: generoId,
+    }));
+
+    const { error: errorGeneros } = await this.db
+    .from("pelicula_genero")
+    .insert(relaciones);
+
+    if(errorGeneros) throw errorGeneros;
+
+    await this.load();
+  }
+
+  async update( id:number, patch: Partial<PeliculaPayload>): Promise<void> {
+
+    const {error} = await this.db
+    .from("peliculas")
+    .update({
+        ...(patch.nombre !== undefined && { nombre: patch.nombre }),
+        ...(patch.sinopsis !== undefined && { sinopsis: patch.sinopsis }),
+        ...(patch.duracionMinutos !== undefined && { duracion_minutos: patch.duracionMinutos }),
+        ...(patch.restriccionEdad !== undefined && { restriccion_edad: patch.restriccionEdad }),
+        ...(patch.preventaHabilitada !== undefined && { preventa_habilitada: patch.preventaHabilitada }),
+        ...(patch.posterUrl !== undefined && { poster_url: patch.posterUrl }),
+        ...(patch.fechaEstreno !== undefined && { fecha_estreno: patch.fechaEstreno }),
+        ...(patch.precioPreventa !== undefined && { precio_preventa: patch.precioPreventa }),
+      })
+    .eq("id", id);
+
+    if(error) throw error;
+
+    if(patch.generoIds) {
+        await this.db.from("pelicula_genero").delete().eq("pelicula_id", id);
+        await this.db.from("pelicula_genero")
+        .insert(patch.generoIds.map(generoId => ({ pelicula_id: id, genero_id: generoId })));
     }
-    ]);
 
-    // 3. Función auxiliar para transformar IDs en objetos GeneroModel enteros
-    private mapearGeneros(ids: number[]): GeneroModel[] {
-        return ids
-            .map(id => this.generoStore.find(id))
-            .filter((g): g is GeneroModel => !!g); // Filtra los undefined por si un ID no existe
-    }
+    await this.load();
+  }
 
-    /* Aca irian los metodos o funciones que comunican con supabase y traen la informacion */
+  async remove( id:number): Promise<void> {
 
-    find(id: number): PeliculaModel | undefined {
-        return this.peliculas().find((p) => Number(p.id) === Number(id));
-    }
+    const {error} = await this.db
+    .from("peliculas")
+    .delete()
+    .eq("id", id);
 
-    add(draft: PeliculaDraft): PeliculaModel {
-        const id = Math.max(0, ...this.peliculas().map((p) => p.id)) + 1;
-        const pelicula: PeliculaModel = {id, ...draft};
-        this.peliculas.update((list) => [...list, pelicula]);
-        return pelicula;
-    }
+    if(error) throw error;
 
-    update(id: number, patch: PeliculaModel): void {
-        this.peliculas.update((list) => list.map((p) => (p.id === id ? {...p, ...patch} : p)));
-    }
+    await this.load();
+  }
 
-    remove(id: number): void {
-        this.peliculas.update((list) => list.filter((p) => p.id !== id));
-    }
-};
+  find(id: number): PeliculaModel | undefined {
+    return this.peliculas().find((p) => Number(p.id) === Number(id));
+  }
+
+  /* permite adaptar las filas en forma snake_case a camelCase */
+  private mapear(row: PeliculaRow): PeliculaModel {
+    return {
+      id: row.id,
+      nombre: row.nombre,
+      sinopsis: row.sinopsis,
+      posterUrl: row.poster_url ?? "https://placehold.co/300x450?text=Poster",
+      duracionMinutos: row.duracion_minutos,
+      generos: (row.pelicula_genero ?? []).map(pg => pg.generos),
+      restriccionEdad: row.restriccion_edad,
+      fechaEstreno: row.fecha_estreno,
+      preventaHabilitada: row.preventa_habilitada,
+      precioPreventa: row.precio_preventa,
+    };
+  }
+}
