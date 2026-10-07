@@ -1,6 +1,3 @@
-
-// Formatos y restricciones posibles para una película
-
 import { GeneroModel } from "../generos/genero.model";
 
 // Solo estos valores son válidos
