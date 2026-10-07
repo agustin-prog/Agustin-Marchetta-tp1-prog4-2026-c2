@@ -13,7 +13,6 @@ import { ButacaStore } from '../../butacas/butaca.store';
 })
 export class PeliculaList {
 
-  private readonly storeButacas = inject(ButacaStore);
   private readonly storePeliculas = inject(PeliculaStore);
 
   /* dos signals de estado de UI: texto busqueda y géneros elegidos */
@@ -56,8 +55,6 @@ export class PeliculaList {
 
   constructor() {
     this.storePeliculas.init();
-    this.storeButacas.add(1).catch(e => console.error("seed sala 1:", e.message));
-    this.storeButacas.add(2).catch(e => console.error("seed sala 2:", e.message));
   }
 
   /* Aca ira la logica para mostrar las peliculas mas vendidas */
