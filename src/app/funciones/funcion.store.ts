@@ -1,105 +1,99 @@
-import { inject, Injectable, signal } from "@angular/core";
-import { PeliculaStore } from "../peliculas/pelicula.store";
-import { FuncionDraft, FuncionModel } from "./funcion.model";
-import { SalaStore } from "../salas/sala.store";
+import { Injectable, signal } from "@angular/core";
+import { supabase } from "../supabase.client";
+import { FuncionModel, FuncionPayload } from "./funcion.model";
 
-@Injectable({ providedIn: "root"})
+// tipo crudo que devuelve la DB
+interface FuncionRow {
+    id: number;
+    pelicula_id: number;
+    sala_id: number;
+    fecha_hora_inicio: string;
+    formato: FuncionModel["formato"];
+    idioma: FuncionModel["idioma"];
+    precio: number;
+}
+
+@Injectable({ providedIn: "root" })
 export class FuncionStore {
 
-    private readonly peliculaStore = inject(PeliculaStore);
+    private readonly db = supabase;
+    readonly funciones = signal<FuncionModel[]>([]);
+    readonly loading = signal(true);
 
-    private readonly salaStore = inject(SalaStore);
+    private yaInicializado = false;
 
-    readonly funciones = signal<FuncionModel[]>([
-        {
-            id: 1,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(1)!, 
-            formato: "2D",
-            idioma: "castellano",
-            fechaHoraInicio: new Date(2026, 9, 27, 13, 0),
-            sala: this.salaStore.find(1)!,
-            precio: 20000,
-            esPreventa: false,
-        },
-        {
-            id: 2,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(1)!, 
-            formato: "2D",
-            idioma: "castellano",
-            fechaHoraInicio: new Date(2026, 9, 27, 14, 30),
-            sala: this.salaStore.find(1)!,
-            precio: 20000,
-            esPreventa: false,
-        },
-        {
-            id: 3,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(1)!, 
-            formato: "3D",
-            idioma: "castellano",
-            fechaHoraInicio: new Date(2026, 9, 28, 16, 0),
-            sala: this.salaStore.find(1)!,
-            precio: 30000,
-            esPreventa: false,
-        },
-        {
-            id: 4,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(1)!, 
-            formato: "4D",
-            idioma: "subtitulada",
-            fechaHoraInicio: new Date(2026, 9, 29, 17, 30),
-            sala: this.salaStore.find(1)!,
-            precio: 80000,
-            esPreventa: false,
-        },
-        {
-            id: 5,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(2)!, 
-            formato: "5D",
-            idioma: "castellano",
-            fechaHoraInicio: new Date(2026, 9, 27, 13, 0), 
-            sala: this.salaStore.find(2)!,
-            precio: 100000,
-            esPreventa: false,
-        },
-        {
-            id: 6,
-            // AGREGANDO EL ! : Le asegurás que el objeto existe
-            pelicula: this.peliculaStore.find(2)!, 
-            formato: "2D",
-            idioma: "castellano",
-            fechaHoraInicio: new Date(2026, 9, 27, 14, 30),
-            sala: this.salaStore.find(2)!,
-            precio: 20000,
-            esPreventa: false,
-        }
-    ]);
+    init() {
 
-    buscarPorPelicula(peliculaID: number): FuncionModel[] | undefined {
+        if(this.yaInicializado) return; // guard
+        this.yaInicializado = true;
 
-        return this.funciones().filter((f) => f.pelicula.id === peliculaID);
+        this.load();
+        this.db
+        .channel("funciones-changes")
+        .on("postgres_changes",
+            { event: "*", schema: "public", table: "funciones" },
+            () => this.load()  
+        )
+        .subscribe();
+    }
+
+    async load(): Promise<void> {
+        const { data, error } = await this.db
+        .from("funciones")
+        .select("*")
+        .order("fecha_hora_inicio");
+
+        if (error) throw error;
+
+        this.funciones.set((data ?? []).map((row: FuncionRow) => this.mapear(row)));
+        this.loading.set(false);
+    }
+
+    buscarPorPelicula(peliculaId: number): FuncionModel[] {
+        return this.funciones().filter(f => f.peliculaId === peliculaId);
     }
 
     find(id: number): FuncionModel | undefined {
-        return this.funciones().find((f) => Number(f.id) === Number(id));
+        return this.funciones().find(f => Number(f.id) === Number(id));
     }
 
-    add(draft: FuncionDraft): FuncionModel {
-        const id = Math.max(0, ...this.funciones().map((f) => f.id)) + 1;
-        const pelicula: FuncionModel = {id, ...draft};
-        this.funciones.update((list) => [...list, pelicula]);
-        return pelicula;
+    async add(payload: FuncionPayload): Promise<void> {
+        const { data, error } = await this.db
+          .from("funciones")
+          .insert({
+            pelicula_id: payload.peliculaId,
+            sala_id: payload.salaId,
+            fecha_hora_inicio: payload.fechaHoraInicio.toISOString(),
+            formato: payload.formato,
+            idioma: payload.idioma,
+            precio: payload.precio,
+          })
+          .select()
+          .single();
+    
+        if (error) throw error;
+        await this.load();
     }
 
-    update(id: number, patch: FuncionModel): void {
-        this.funciones.update((list) => list.map((f) => (f.id === id ? {...f, ...patch} : f)));
+    async remove(id: number): Promise<void> {
+        const { error } = await this.db
+        .from("funciones")
+        .delete()
+        .eq("id", id);
+
+        if (error) throw error;
+        await this.load();
     }
 
-    remove(id: number): void {
-        this.funciones.update((list) => list.filter((f) => f.id !== id));
+    private mapear(row: FuncionRow): FuncionModel {
+        return {
+            id: row.id,
+            peliculaId: row.pelicula_id,
+            salaId: row.sala_id,
+            fechaHoraInicio: new Date(row.fecha_hora_inicio),
+            formato: row.formato,
+            idioma: row.idioma,
+            precio: row.precio,
+        };
     }
-};
+}

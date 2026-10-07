@@ -3,7 +3,7 @@ import { ButacaModel } from "../butacas/butaca.model";
 export interface SalaModel {
     id: number;
     nombreSala: string;
-    matrizButacas: ButacaModel[][][];
+    /* matrizButacas: ButacaModel[][][]; */
 }
 
 export type SalaDraft = Omit<SalaModel, "id">;

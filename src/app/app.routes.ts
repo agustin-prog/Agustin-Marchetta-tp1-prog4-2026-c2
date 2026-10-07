@@ -14,6 +14,7 @@ export const routes: Routes = [
     //{ path: 'admin/peliculas', component:  },
     { path: 'admin/peliculas/nueva', component: PeliculaForm  },
     { path: 'admin/peliculas/:peliculaId/editar', component: PeliculaForm },
+    
 
     { path: '**', redirectTo: 'peliculas' }
 ];

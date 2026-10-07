@@ -1,6 +1,6 @@
 @if (pelicula(); as p) {
     <div class="ficha">
-        <img [src]="p.imagenURL" [alt]="p.nombre" />
+        <img [src]="p.posterUrl" [alt]="p.nombre" />
 
         <div class="encabezado">
 
@@ -63,7 +63,7 @@
 
                                 <span class="badge">{{ f.idioma }}</span>
 
-                                @if (f.esPreventa) {
+                                @if (p.preventaHabilitada) {
                                     <span class="badge preventa">Preventa</span>
                                 }
                             </p>
