@@ -1,6 +1,13 @@
 <h2>PELÍCULAS EN CARTELERA</h2>
 
 <section class="main">
+
+    <div class="hero">
+        <p>Aca van a ir un hero q desliza y muestra las peliculas o promociones</p>
+    </div>
+
+    <div class="linea-separadora"></div>
+
     <input 
         type="text"
         placeholder="Buscar película o género..."
@@ -10,19 +17,14 @@
     
     <div class="generos">
         @for (g of generosDisponibles(); track g) {
-                <button
-                    type="button"
-                    class="chip"
-                    [class.selected]="generoSeleccionado()?.id === g.id"
-                    (click)="elegirGenero(g)"
-                >
-                    {{ g.nombre }}
+            <button
+                type="button"
+                class="chip"
+                [class.selected]="generoSeleccionado()?.id === g.id"
+                (click)="elegirGenero(g)">
+                {{ g.nombre }}
             </button>
         }
-    </div>
-
-    <div class="hero">
-        
     </div>
 
     <div class="linea-separadora"></div>
