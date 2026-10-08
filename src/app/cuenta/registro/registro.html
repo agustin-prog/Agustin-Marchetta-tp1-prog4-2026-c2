@@ -1,0 +1,131 @@
+<section class="cuenta-pagina">
+
+    @if (exito()) {
+        <div class="form-card form-card--exito">
+            <h1 class="form-card__titulo">¡Cuenta creada!</h1>
+            <p>Tu cuenta se registró correctamente. Si el proyecto tiene confirmación de email activada, revisá tu correo antes de ingresar.</p>
+            <a class="btn-acento btn-exito-link" routerLink="/cuenta/login">Ir a iniciar sesión</a>
+        </div>
+    } @else {
+        <form class="form-card" (submit)="$event.preventDefault(); registrarse()">
+
+            <h1 class="form-card__titulo">Crear cuenta</h1>
+
+            <div class="form-card__fila">
+                <label class="form-card__campo">
+                    <span>Nombre</span>
+                    <input
+                        type="text"
+                        required
+                        autocomplete="given-name"
+                        [value]="nombre()"
+                        (input)="nombre.set($any($event.target).value)"
+                    />
+                </label>
+
+                <label class="form-card__campo">
+                    <span>Apellido</span>
+                    <input
+                        type="text"
+                        required
+                        autocomplete="family-name"
+                        [value]="apellido()"
+                        (input)="apellido.set($any($event.target).value)"
+                    />
+                </label>
+            </div>
+
+            <label class="form-card__campo">
+                <span>Email</span>
+                <input
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="tu@email.com"
+                    [value]="email()"
+                    (input)="email.set($any($event.target).value)"
+                />
+            </label>
+
+            <label class="form-card__campo">
+                <span>Contraseña</span>
+                <input
+                    type="password"
+                    required
+                    minlength="6"
+                    autocomplete="new-password"
+                    placeholder="Mínimo 6 caracteres"
+                    [value]="password()"
+                    (input)="password.set($any($event.target).value)"
+                />
+            </label>
+
+            <label class="form-card__campo">
+                <span>Fecha de nacimiento</span>
+                <input
+                    type="date"
+                    required
+                    [value]="fechaNacimiento()"
+                    (input)="fechaNacimiento.set($any($event.target).value)"
+                />
+            </label>
+
+            <div class="form-card__fila">
+                <label class="form-card__campo">
+                    <span>Tipo de sangre</span>
+                    <input
+                        type="text"
+                        required
+                        placeholder="Ej: A+"
+                        [value]="tipoSangre()"
+                        (input)="tipoSangre.set($any($event.target).value)"
+                    />
+                </label>
+
+                <label class="form-card__campo">
+                    <span>Color de ojos</span>
+                    <input
+                        type="text"
+                        required
+                        placeholder="Ej: Marrón"
+                        [value]="colorOjos()"
+                        (input)="colorOjos.set($any($event.target).value)"
+                    />
+                </label>
+            </div>
+
+            <label class="form-card__campo">
+                <span>Días de vacaciones por año</span>
+                <input
+                    type="number"
+                    min="0"
+                    required
+                    placeholder="Ej: 21"
+                    [value]="diasVacaciones() ?? ''"
+                    (input)="diasVacaciones.set($any($event.target).valueAsNumber)"
+                />
+            </label>
+
+            @if (errorMsg(); as msg) {
+                <p class="form-card__error">{{ msg }}</p>
+            }
+
+            <button class="btn-acento" type="submit" [disabled]="cargando()">
+                {{ cargando() ? "Creando cuenta..." : "Registrarme" }}
+            </button>
+
+            <div class="divider"><span>o registrate con</span></div>
+
+            <button class="btn-social" type="button" (click)="conGitHub()" [disabled]="cargando()">
+                Continuar con GitHub
+            </button>
+
+            <p class="form-card__pie">
+                ¿Ya tenés cuenta?
+                <a routerLink="/cuenta/login">Iniciá sesión</a>
+            </p>
+
+        </form>
+    }
+
+</section>

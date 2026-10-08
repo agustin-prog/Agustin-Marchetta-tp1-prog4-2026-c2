@@ -1,0 +1,39 @@
+/* Solo lo especifico del registro; los estilos de form-card son globales (styles.css) */
+:host {
+    display: block;
+}
+
+.cuenta-pagina {
+    display: grid;
+    place-items: center;
+    padding: 3rem 1rem;
+    min-height: 80vh;
+}
+
+/* fila de dos campos lado a lado (en mobile quedan apilados) */
+.form-card__fila {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+}
+
+@media (max-width: 480px) {
+    .form-card__fila {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-card--exito {
+    text-align: center;
+}
+
+.form-card--exito p {
+    color: var(--color-texto-sec);
+    margin: 0;
+}
+
+.btn-exito-link {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}

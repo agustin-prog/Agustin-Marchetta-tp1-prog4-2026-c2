@@ -1,0 +1,11 @@
+/* Solo el centrado de la página de login; los estilos de form-card son globales (styles.css) */
+:host {
+    display: block;
+}
+
+.cuenta-pagina {
+    display: grid;
+    place-items: center;
+    padding: 3rem 1rem;
+    min-height: 80vh;
+}
