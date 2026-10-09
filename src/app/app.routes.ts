@@ -12,6 +12,8 @@ export const routes: Routes = [
     /* Publico */
     { path: 'peliculas', component: PeliculaList },
     { path: 'peliculas/:peliculaId', component: PeliculaDetail },
+    { path: '/funcion/:funcionId/butacas', component:},
+    { path: '/compra/confirmacion/:ventaId', component:},
 
     /* Cuenta */
     { path: 'cuenta/login', component: CuentaLogin },
