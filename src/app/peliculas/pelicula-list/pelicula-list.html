@@ -3,7 +3,19 @@
 <section class="main">
 
     <div class="hero">
-        <p>Aca van a ir un hero q desliza y muestra las peliculas o promociones</p>
+        
+    </div>
+
+    <div class="linea-separadora"></div>
+
+    <h3>PELÍCULAS MÁS VENDIDAS</h3>
+
+    <div class="grid">
+        @for (p of top3(); track p.id) {
+            <a [routerLink]="['/peliculas', p.id]">
+                <app-pelicula-card [pelicula]="p" />
+            </a>
+        }
     </div>
 
     <div class="linea-separadora"></div>
