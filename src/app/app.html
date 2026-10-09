@@ -1,18 +1,47 @@
 <nav>
-
   <section>
-    <a routerLink="/peliculas" routerLinkActive="active"
-    [routerLinkActiveOptions]="{exact: true}"
-    >Cartelera</a>
-  
-    <!-- Link q este invisible, pero q cuando el login sea con el admin se visualize -->
-    <a routerLink="/peliculas/1" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Admin . Películas</a>
-  
+    <a routerLink="/peliculas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Cartelera</a>
+
+    @if(perfilStore.perfil()?.rol === 'empleado'){
+      <a routerLink="/admin/promociones/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Validar QR</a>
+    }
   </section>
 
-  <!-- Secction q contiene todas las opciones q tienen un usuario sin registrar y registrado -->
   <section>
-    <a href="" class="cuenta">Mi cuenta</a>
+    @if (auth.session(); as sesion) {
+      <!-- cuando el usuario esta logeado -->
+      <div class="menu-cuenta">
+        <button class="cuenta_btn" (click)="menuAbierto.update(abierto => !abierto)">
+          Mi perfil
+        </button>
+
+        @if (menuAbierto()) {
+          <div class="dropdown" (click)="menuAbierto.set(false)">
+
+            @if (perfilStore.perfil()?.rol === 'admin') {
+              <a routerLink="/admin/peliculas/nueva" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin película</a>
+              <a routerLink="/admin/funciones/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin función</a>
+              <a routerLink="/admin/salas/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin sala</a>
+              <a routerLink="/admin/candy/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin candy</a>
+              <a routerLink="/admin/promociones/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin promociones</a>
+              <a routerLink="/admin/ventas/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Admin ventas</a>
+              
+            }@else {
+
+              <p class="cuenta_nombre">{{ perfilStore.perfil()?.nombre ?? sesion.user.email }}</p>
+              <a routerLink="/cuenta/mis-peliculas">Mis películas</a>
+              <a routerLink="/cuenta/puntos">Mis puntos</a>
+              <a routerLink="/cuenta/historial">Historial</a>
+          }
+
+          <button (click)="cerrarSesion()">Cerrar sesión</button>
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- Cuando no estas logeado -->
+      <a routerLink="/cuenta/login" routerLinkActive="active" class="cuenta">Mi cuenta</a>
+    }
   </section>
 </nav>
 <router-outlet />

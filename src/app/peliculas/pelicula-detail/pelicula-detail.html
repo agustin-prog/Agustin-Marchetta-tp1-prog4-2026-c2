@@ -71,9 +71,10 @@
                             <p class="precio">{{ f.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</p>
                         </div>
 
-                        <button type="button" class="btn-seleccionar">
+                        <!-- <button type="button" class="btn-seleccionar">
                             Elegir butacas
-                        </button>
+                        </button> -->
+                        <a [routerLink]="['/funcion', f.id, 'butacas']">Elegir butacas</a>
 
                     </article>
                 }

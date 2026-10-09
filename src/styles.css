@@ -103,3 +103,136 @@ img, picture, video, canvas, svg {
   max-width: 100%; /* Evita que las imágenes "rompan" el diseño en celulares */
   height: auto;
 }
+
+/* ================================================================
+   SISTEMA DE FORMULARIOS GLOBAL
+   Clases reutilizables por todos los formularios de la app
+   (login, registro, admin de peliculas/funciones/productos...)
+   ================================================================ */
+
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    width: min(420px, 92vw);
+    padding: 2rem;
+    background: var(--color-superficie);
+    border: 1px solid var(--color-superficie-2);
+    border-radius: var(--radio-md);
+}
+
+.form-card__titulo {
+    margin: 0 0 0.5rem;
+    font-family: var(--fuente-nortune);
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: 0.03em;
+}
+
+.form-card__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-card__campo span {
+    font-size: 0.85rem;
+    color: var(--color-texto-sec);
+}
+
+.form-card__campo input,
+.form-card__campo select,
+.form-card__campo textarea {
+    padding: 0.65rem 0.8rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-superficie-2);
+    border-radius: var(--radio-sm);
+    color: var(--color-texto);
+    font-family: var(--font);
+}
+
+.form-card__campo input:focus,
+.form-card__campo select:focus,
+.form-card__campo textarea:focus {
+    outline: none;
+    border-color: var(--color-acento);
+}
+
+.form-card__error {
+    margin: 0;
+    padding: 0.5rem 0.8rem;
+    background: rgba(237, 53, 78, 0.12);
+    border-left: 3px solid var(--color-acento);
+    border-radius: var(--radio-sm);
+    color: var(--color-acento);
+    font-size: 0.9rem;
+}
+
+.form-card__pie {
+    margin: 0.25rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-texto-sec);
+}
+
+.form-card__pie a {
+    color: var(--color-acento);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-card__pie a:hover {
+    text-decoration: underline;
+}
+
+/* Botones globales */
+.btn-acento {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: var(--radio-sm);
+    background: var(--color-acento);
+    color: var(--color-texto);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-acento:hover:not(:disabled) {
+    background: var(--color-acento-hover);
+}
+
+.btn-social {
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: var(--radio-sm);
+    background: var(--color-superficie-2);
+    color: var(--color-texto);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-social:hover:not(:disabled) {
+    background: var(--color-info);
+}
+
+.btn-acento:disabled,
+.btn-social:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Separador "o continua con" */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-texto-sec);
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--color-superficie-2);
+}
