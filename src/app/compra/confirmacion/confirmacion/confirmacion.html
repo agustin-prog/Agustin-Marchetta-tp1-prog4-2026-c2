@@ -1,0 +1,23 @@
+<div class="confirmacion-pagina">
+    <div class="confirmacion-card">
+        <div class="exito-icono">✅</div>
+        <h1 class="confirmacion-titulo">¡Compra exitosa!</h1>
+
+        <p class="confirmacion-sub">Tu compra ha sido registrada correctamente</p>
+
+        <div class="qr-container">
+            <p class="qr-label">Tu código QR:</p>
+            <div class="qr-codigo">{{ qr() }}</div>
+        </div>
+
+        <p class="confirmacion-nota">
+            Presentá este código al ingresar al cine.<br>
+            El empleado lo va a escanear para validar tu entrada.
+        </p>
+
+        <div class="botones">
+            <a routerLink="/peliculas" class="btn-acento">Ver más películas</a>
+            <a routerLink="/cuenta/mis-peliculas" class="btn-social">Mis películas</a>
+        </div>
+    </div>
+</div>

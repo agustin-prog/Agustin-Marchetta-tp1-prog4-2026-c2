@@ -1,0 +1,268 @@
+:host {
+    display: block;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.butacas-pagina {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- Header ---------- */
+.butacas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.butacas-header h1 {
+    margin: 0;
+    font-family: var(--fuente-nortune);
+    font-weight: 400;
+}
+
+.funcion-info {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.funcion-info span {
+    padding: 0.3rem 0.75rem;
+    background: var(--color-superficie);
+    border-radius: var(--radio-sm);
+    font-size: 0.85rem;
+}
+
+.funcion-info .precio-base {
+    background: var(--color-info);
+    color: var(--color-texto);
+    font-weight: 600;
+}
+
+.btn-volver {
+    padding: 0.4rem 0.8rem;
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    text-decoration: none;
+    border-radius: var(--radio-sm);
+    font-size: 0.85rem;
+}
+
+.btn-volver:hover {
+    background: var(--color-superficie-2);
+}
+
+/* ---------- Leyenda ---------- */
+.leyenda {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: var(--color-superficie);
+    border-radius: var(--radio-sm);
+}
+
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-texto-sec);
+}
+
+.swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* ---------- Pantalla ---------- */
+.pantalla {
+    text-align: center;
+    padding: 0.5rem;
+    background: var(--color-superficie-2);
+    border-radius: var(--radio-sm);
+    font-family: var(--fuente-nortune);
+    letter-spacing: 0.2em;
+    color: var(--color-texto-sec);
+    margin-bottom: 1rem;
+}
+
+/* ---------- Grilla ---------- */
+.grilla {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.fila {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fila-letra {
+    width: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--color-texto-sec);
+    font-size: 0.9rem;
+}
+
+.sector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ---------- Butacas ---------- */
+.butaca {
+    width: 36px;
+    height: 36px;
+    border: 2px solid transparent;
+    border-radius: var(--radio-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Libre (default) */
+.butaca {
+    background: var(--color-superficie);
+    border-color: var(--color-superficie-2);
+    color: var(--color-texto);
+}
+
+.butaca:hover:not(.butaca-ocupada) {
+    border-color: var(--color-acento);
+    transform: scale(1.05);
+}
+
+/* VIP */
+.butaca-vip {
+    background: var(--color-vip);
+    border-color: var(--color-vip);
+    color: #000;
+}
+
+.butaca-vip:hover:not(.butaca-ocupada) {
+    border-color: var(--color-acento);
+}
+
+/* Accesible */
+.butaca-accesible {
+    background: var(--color-accesible);
+    border-color: var(--color-accesible);
+    color: #fff;
+}
+
+.butaca-accesible:hover:not(.butaca-ocupada) {
+    border-color: var(--color-acento);
+}
+
+/* Ocupada */
+.butaca-ocupada {
+    background: var(--color-superficie-2);
+    border-color: var(--color-superficie-2);
+    color: var(--color-texto-sec);
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+/* Seleccionada */
+.butaca-seleccionada {
+    background: var(--color-acento) !important;
+    border-color: var(--color-acento) !important;
+    color: var(--color-texto) !important;
+    transform: scale(1.1);
+}
+
+/* ---------- Resumen y confirmar ---------- */
+.seleccion-resumen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--color-superficie);
+    border-radius: var(--radio-md);
+    text-align: center;
+}
+
+.resumen-texto {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-texto-sec);
+}
+
+.total {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-texto);
+}
+
+.error-msg {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: rgba(237, 53, 78, 0.15);
+    border-left: 3px solid var(--color-acento);
+    border-radius: var(--radio-sm);
+    color: var(--color-acento);
+    font-size: 0.9rem;
+}
+
+.sin-seleccion {
+    color: var(--color-texto-sec);
+    font-style: italic;
+}
+
+.btn-confirmar {
+    padding: 0.75rem 2rem;
+    background: var(--color-acento);
+    color: var(--color-texto);
+    border: none;
+    border-radius: var(--radio-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-confirmar:hover:not(:disabled) {
+    background: var(--color-acento-hover);
+}
+
+.btn-confirmar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .butaca {
+        width: 30px;
+        height: 30px;
+        font-size: 0.65rem;
+    }
+
+    .sector {
+        gap: 0.35rem;
+    }
+
+    .fila {
+        gap: 0.5rem;
+    }
+}
