@@ -3,7 +3,9 @@ import { RouterLink } from '@angular/router';
 import { PeliculaCard } from '../pelicula-card/pelicula-card';
 import { GeneroModel } from '../../generos/genero.model';
 import { PeliculaStore } from '../pelicula.store';
-import { ButacaStore } from '../../butacas/butaca.store';
+import { ReporteStore } from '../../reportes/reportes.store';
+import { PerfilModel } from '../../perfiles/perfil.model';
+import { PeliculaModel } from '../pelicula.model';
 
 @Component({
   imports: [RouterLink, PeliculaCard],
@@ -14,11 +16,13 @@ import { ButacaStore } from '../../butacas/butaca.store';
 export class PeliculaList {
 
   private readonly storePeliculas = inject(PeliculaStore);
+  private readonly storeReportes = inject(ReporteStore);
 
-  /* dos signals de estado de UI: texto busqueda y géneros elegidos */
+  private readonly topReportes = signal<{ peliculaId: number; cantidad: number }[]>([]);
+
   texto = signal("");
   generoSeleccionado = signal<GeneroModel | null>(null);
-
+  
   // computed: se recalcula solo cada vez que cambian peliculas(), texto() o generoSeleccionado()
   generosDisponibles = computed(() => {
     const mapa = new Map<number, GeneroModel>();
@@ -45,6 +49,18 @@ export class PeliculaList {
     });
   });
 
+  top3 = computed(() => {
+    const peliculas = this.storePeliculas.peliculas();
+
+    return this.topReportes()
+      .map((r) => peliculas.find((p) => p.id === r.peliculaId))
+      .filter((p): p is PeliculaModel => p !== undefined);
+  });
+
+  peliculaDe(id: number) {
+    return this.storePeliculas.find(id);
+  }
+
   elegirGenero(g: GeneroModel){
     if (this.generoSeleccionado()?.id === g.id) {
       this.generoSeleccionado.set(null);
@@ -55,6 +71,11 @@ export class PeliculaList {
 
   constructor() {
     this.storePeliculas.init();
+
+    this.storeReportes
+    .topPeliculas(3)
+    .then((reportes) => this.topReportes.set(reportes))
+    .catch((err) => console.error('Error cargando top películas', err));
   }
 
   /* Aca ira la logica para mostrar las peliculas mas vendidas */
