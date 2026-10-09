@@ -1,0 +1,89 @@
+.confirmacion-pagina {
+    display: grid;
+    place-items: center;
+    min-height: 80vh;
+    padding: 2rem;
+}
+
+.confirmacion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 3rem;
+    background: var(--color-superficie);
+    border-radius: var(--radio-md);
+    border: 1px solid var(--color-superficie-2);
+    max-width: 500px;
+    text-align: center;
+}
+
+.exito-icono {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.confirmacion-titulo {
+    margin: 0;
+    font-family: var(--fuente-nortune);
+    font-weight: 400;
+    color: var(--color-acento);
+}
+
+.confirmacion-sub {
+    margin: 0;
+    color: var(--color-texto-sec);
+    font-size: 0.95rem;
+}
+
+.qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: var(--color-bg);
+    border-radius: var(--radio-sm);
+    border: 1px dashed var(--color-texto-sec);
+}
+
+.qr-label {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-texto-sec);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.qr-codigo {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-texto);
+    word-break: break-all;
+    padding: 0.75rem 1rem;
+    background: var(--color-superficie-2);
+    border-radius: var(--radio-sm);
+}
+
+.confirmacion-nota {
+    font-size: 0.85rem;
+    color: var(--color-texto-sec);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.botones {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.botones a {
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--radio-sm);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+}

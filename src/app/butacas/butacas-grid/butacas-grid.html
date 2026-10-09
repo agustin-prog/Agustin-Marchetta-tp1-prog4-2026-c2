@@ -1,0 +1,93 @@
+@if (funcion(); as f) {
+
+    <div class="butacas-pagina">
+
+        <div class="butacas-header">
+            <h1>Elige tus butacas</h1>
+            <div class="funcion-info">
+                <span>{{ f.formato }}</span>
+                <span>{{ f.idioma }}</span>
+                <span>{{ f.fechaHoraInicio | date:'EEE d MMM, HH:mm' }}</span>
+                <span class="precio-base">{{ f.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+            <a class="btn-volver" routerLink="/peliculas/{{ f.peliculaId }}">← Volver al detalle</a>
+        </div>
+
+        <!-- Leyenda de colores -->
+        <div class="leyenda">
+            <span class="leyenda-item"><span class="swatch butaca-libre"></span> Libre</span>
+            <span class="leyenda-item"><span class="swatch butaca-vip"></span> VIP (x1.5)</span>
+            <span class="leyenda-item"><span class="swatch butaca-accesible"></span> Accesible</span>
+            <span class="leyenda-item"><span class="swatch butaca-ocupada"></span> Ocupada</span>
+            <span class="leyenda-item"><span class="swatch butaca-seleccionada"></span> Seleccionada</span>
+        </div>
+
+        <!-- Pantalla (la parte de arriba de la sala) -->
+        <div class="pantalla">PANTALLA</div>
+
+        <!-- Grilla de butacas -->
+        <div class="grilla">
+            @for (fila of matriz(); track $index; let fi = $index) {
+                <div class="fila">
+                    <span class="fila-letra">{{ 'ABCDEFGHIJKLMNOPQRST'[fi] }}</span>
+
+                    @for (sector of fila; track $index; let si = $index) {
+                        @if (sector.length > 0) {
+                            <div class="sector">
+                                @for (butaca of sector; track butaca.id) {
+                                    <button
+                                        type="button"
+                                        class="butaca"
+                                        [class.butaca-vip]="butaca.tipo === 'VIP'"
+                                        [class.butaca-accesible]="butaca.tipo === 'accesible'"
+                                        [class.butaca-ocupada]="estaOcupada(butaca)"
+                                        [class.butaca-seleccionada]="estaSeleccionada(butaca)"
+                                        [disabled]="estaOcupada(butaca)"
+                                        (click)="elegirButaca(butaca)"
+                                        [title]="'Fila ' + butaca.letraFila + ' - Sector ' + butaca.sector + ' - N° ' + butaca.numero + ' (' + butaca.tipo + ')'"
+                                    >
+                                        {{ butaca.numero }}
+                                    </button>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Resumen de selección y botón confirmar -->
+        <div class="seleccion-resumen">
+            @if (seleccionadas().length > 0) {
+                <p class="resumen-texto">
+                    {{ seleccionadas().length }} butaca{{ seleccionadas().length > 1 ? 's' : '' }} seleccionada{{ seleccionadas().length > 1 ? 's' : '' }}
+                </p>
+
+                @if (!seleccionValida()) {
+                    <p class="error-msg">
+                        ⚠️ Las butacas deben ser contiguas en la misma fila y mismo sector (RN18)
+                    </p>
+                }
+
+                <p class="total">
+                    Total: <strong>{{ total() | currency:'ARS':'symbol-narrow':'1.0-0' }}</strong>
+                </p>
+
+                <p class="error-msg" *ngIf="errorMsg()">{{ errorMsg() }}</p>
+
+                <button
+                    class="btn-confirmar"
+                    [disabled]="!seleccionValida() || cargando()"
+                    (click)="confirmar()"
+                >
+                    {{ cargando() ? "Procesando..." : "Confirmar compra" }}
+                </button>
+            } @else {
+                <p class="sin-seleccion">Seleccioná butacas para continuar</p>
+            }
+        </div>
+
+    </div>
+} @else {
+    <p class="not-found">Función no encontrada</p>
+}

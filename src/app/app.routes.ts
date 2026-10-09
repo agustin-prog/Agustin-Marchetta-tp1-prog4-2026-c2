@@ -4,6 +4,8 @@ import { PeliculaForm } from './peliculas/pelicula-form/pelicula-form';
 import { PeliculaList } from './peliculas/pelicula-list/pelicula-list';
 import { CuentaLogin } from './cuenta/login/login';
 import { CuentaRegistro } from './cuenta/registro/registro';
+import { ButacasGrid } from './butacas/butacas-grid/butacas-grid';
+import { Confirmacion } from './compra/confirmacion/confirmacion/confirmacion';
 import { adminGuard } from './auth/auth.admin';
 
 export const routes: Routes = [
@@ -12,8 +14,8 @@ export const routes: Routes = [
     /* Publico */
     { path: 'peliculas', component: PeliculaList },
     { path: 'peliculas/:peliculaId', component: PeliculaDetail },
-    { path: '/funcion/:funcionId/butacas', component:},
-    { path: '/compra/confirmacion/:ventaId', component:},
+    { path: 'funcion/:funcionId/butacas', component: ButacasGrid },
+    { path: 'compra/confirmacion/:qr', component: Confirmacion },
 
     /* Cuenta */
     { path: 'cuenta/login', component: CuentaLogin },
