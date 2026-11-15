@@ -1,0 +1,32 @@
+<section class="proximamente">
+    <header class="seccion-header">
+        <h2 class="seccion-titulo">Próximos estrenos</h2>
+        <span class="seccion-subtitulo">Películas que llegan pronto al cine</span>
+    </header>
+
+    @if (error(); as mensaje) {
+        <p class="error-msg">{{ mensaje }}</p>
+    }
+
+    <div class="grid">
+        @for (p of peliculas(); track p.id) {
+            <div class="item">
+                <a [routerLink]="['/peliculas', p.id]" class="card-link">
+                    <app-pelicula-card [pelicula]="p" />
+                </a>
+
+                @if (perfil()) {
+                    <button type="button" class="btn-alerta"
+                            [class.activa]="storeAlertas.peliculaIds().has(p.id)"
+                            (click)="alternarAlerta(p.id)">
+                        {{ storeAlertas.peliculaIds().has(p.id) ? 'Alerta activada' : 'Avisarme' }}
+                    </button>
+                } @else {
+                    <a class="btn-alerta" routerLink="/cuenta/login">Iniciá sesión para activar la alerta</a>
+                }
+            </div>
+        } @empty {
+            <p class="empty">No hay estrenos próximos.</p>
+        }
+    </div>
+</section>
