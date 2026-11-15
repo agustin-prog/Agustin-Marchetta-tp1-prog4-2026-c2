@@ -1,0 +1,22 @@
+<article class="card">
+    <img [src]="pelicula().posterUrl" [alt]="pelicula().nombre" loading="lazy" />
+
+    <div class="body">
+
+        @if (preventa()) {
+            <span class="etiqueta preventa">Preventa</span>
+        } @else if (proximo()) {
+            <span class="etiqueta estreno">Estreno {{ fechaEstreno() | fechaPipe: false }}</span>
+        }
+
+        <h3>{{ pelicula().nombre }}</h3>
+
+        <div class="meta">
+            @if (pelicula().restriccionEdad !== 'ninguna') {
+                <span class="badge restriccion">{{ pelicula().restriccionEdad }}</span>
+            }
+
+            <p class="generos">{{ pelicula().generos.map((g) => g.nombre).join(' · ') }}</p>
+        </div>
+    </div>
+</article>
