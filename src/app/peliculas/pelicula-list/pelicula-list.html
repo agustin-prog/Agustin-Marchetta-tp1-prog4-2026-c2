@@ -1,0 +1,50 @@
+<section class="cartelera">
+
+    @if (top3(); as top3) {
+        <header class="seccion-header">
+            <h2 class="seccion-titulo">Películas más vendidas</h2>
+            <span class="seccion-subtitulo">Las favoritas del público</span>
+        </header>
+
+        <div class="grid grid-top3">
+            @for (p of top3; track p.id) {
+                <a [routerLink]="['/peliculas', p.id]" class="top3-item">
+                    <app-pelicula-card [pelicula]="p" />
+                </a>
+            }
+        </div>
+
+        <div class="linea-separadora"></div>
+    }
+
+    <app-buscador-peliculas class="buscador" [(texto)]="texto" placeholder="Buscar película o género..." />
+
+    <div class="generos">
+        @for (g of generosDisponibles(); track g.id) {
+            <button
+                type="button"
+                class="chip-genero"
+                [class.selected]="generoSeleccionado()?.id === g.id"
+                (click)="elegirGenero(g)">
+                {{ g.nombre }}
+            </button>
+        }
+    </div>
+
+    <div class="linea-separadora"></div>
+
+    <header class="seccion-header">
+        <h2 class="seccion-titulo">Cartelera</h2>
+        <span class="seccion-subtitulo">{{ peliculasFiltradas().length }} películas en cartel</span>
+    </header>
+
+    <div class="grid">
+        @for (p of peliculasFiltradas(); track p.id) {
+            <a [routerLink]="['/peliculas', p.id]">
+                <app-pelicula-card [pelicula]="p"/>
+            </a>
+        } @empty {
+            <p class="empty">No se encontraron películas con ese criterio.</p>
+        }
+    </div>
+</section>
