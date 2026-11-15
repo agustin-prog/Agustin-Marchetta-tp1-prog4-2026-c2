@@ -1,0 +1,7 @@
+<input
+  class="buscador"
+  type="text"
+  [placeholder]="placeholder()"
+  [value]="texto()"
+  (input)="texto.set($any($event.target).value)"
+/>

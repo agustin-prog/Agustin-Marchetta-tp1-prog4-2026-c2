@@ -1,0 +1,9 @@
+.buscador {
+    padding: 10px 15px 10px 15px;
+    border-radius: var(--radius-pill);
+    width: 60%;
+}
+
+input:focus {
+    outline-color: var(--color-primary);
+}
