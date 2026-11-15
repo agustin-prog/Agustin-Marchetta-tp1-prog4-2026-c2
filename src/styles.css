@@ -1,0 +1,205 @@
+
+/* =========================================
+    FUENTE PERSONALIZADA
+========================================= */
+
+@font-face {
+    font-family: 'Tanker';
+    src: url('/fonts/Tanker-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nortune';
+    src: url('/fonts/Nortune-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Disclaimer Classic';
+    src: url('/fonts/Disclaimer-Classic.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Disclaimer Plain';
+    src: url('/fonts/Disclaimer-Plain.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* =========================================
+    VARIABLES GLOBALES
+========================================= */
+
+:root {
+    --color-bg: #002A32;
+    --color-bg-secondary: #003943;
+    --color-bg-tertiary: #064752;
+    --color-bg-nav: #0f0f1a;
+
+    --color-surface: #F0EDE5;
+    --color-surface-hover: #E4E0D6;
+    --color-surface-dark: #073943;
+
+    --color-primary: #ED254E;
+    --color-primary-hover: #D91D43;
+    --color-primary-light: #FFB173;
+
+    --color-success: #00FF86;
+    --color-info: #60EFFF;
+    --color-blue: #1664B0;
+    --color-highlight: #E6FF2A;
+
+    --color-text: #F0EDE5;
+    --color-text-dark: #002A32;
+    --color-text-muted: #B3B3B3;
+    --color-text-disabled: #777F80;
+
+    --color-border: rgba(240, 237, 229, 0.15);
+    --color-border-light: rgba(0, 42, 50, 0.15);
+    --color-border-focus: #60EFFF;
+
+    --font-main: Arial, sans-serif;
+    --font-heading: 'Tanker', sans-serif;
+    --font-bold: 'Nortune', sans-serif;
+    --font-decorative: 'Disclaimer Classic', sans-serif;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.375rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: 2.25rem;
+    --text-4xl: 3rem;
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-pill: 999px;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.20);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.30);
+
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+
+    --navbar-height: 76px;
+    --container-width: 1400px;
+}
+
+/* =========================================
+    RESET GENERAL
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-main);
+    font-size: var(--text-base);
+    line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: var(--text-4xl);
+}
+
+h2 {
+    font-size: var(--text-3xl);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+}
+
+p {
+    color: var(--color-text-muted);
+}
+
+.linea-separadora {
+    width: 100%;
+    border: 4px solid var(--color-bg-tertiary);
+    border-radius: var(--radius-pill);
+    margin: 10px 0 10px 0;
+}
+
+/* ========== PANTALLA MOVIL ========== */
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: var(--text-3xl);
+    }
+
+    h2 {
+        font-size: var(--text-2xl);
+    }
+
+    .container {
+        width: min(100% - 28px, var(--container-width));
+    }
+
+    .section {
+        padding-block: var(--space-2xl);
+    }
+
+    .btn {
+        padding: 11px 18px;
+    }
+}
