@@ -1,0 +1,167 @@
+@if (pelicula(); as p) {
+    <div class="ficha">
+        <img [src]="p.posterUrl" [alt]="p.nombre" />
+
+        <div class="encabezado">
+
+            <h2>{{ p.nombre }}</h2>
+            
+            <p class="meta">
+                <span class="badge">{{ p.duracionMinutos | duracion }}</span>
+    
+                @if (p.restriccionEdad !== "ninguna") {
+                    <span class="badge restriccion">{{ p.restriccionEdad }}</span>
+                }
+            </p>
+
+            @if (preventa()) {
+                <p class="aviso-preventa">
+                    Preventa hasta el estreno ({{ fechaEstreno() | fechaPipe: false }}): precio especial.
+                </p>
+            }
+        </div>
+
+        <div class="datos">
+
+            <p class="generos">{{ p.generos.map((g) => g.nombre ).join(", ") }}</p>
+
+            <p class="sinopsis">{{ p.sinopsis }}</p>
+
+        </div>
+    </div>
+
+    <section class="funciones">
+
+        <h3>Funciones disponibles</h3>
+
+        @if (estado() === 'proximamente') {
+            <p class="sin-funciones">
+                Se estrena el {{ fechaEstreno() | fechaPipe: false }}. Las entradas todavía no están a la venta.
+            </p>
+        } @else {
+
+            @let lista = funciones();
+
+            @if (fechasDisponibles().length > 0) {
+                <div class="fechas-bar">
+                    @for (timestamp of fechasDisponibles(); track timestamp) {
+                        @let esSeleccionado = fechaSeleccionada() === timestamp;
+
+                        <button
+                            type="button"
+                            class="chip"
+                            [class.selected]="esSeleccionado"
+                            (click)="elegirFecha(timestamp)"
+                        >
+                            @if (esHoy(timestamp)) {
+                                Hoy 
+                            } @else if (esManana(timestamp)) {
+                                Mañana
+                            } @else {
+                                {{ timestamp | fechaPipe: false }}
+                            }
+                        </button>
+                    }
+                </div>
+            }
+
+            @if (lista && lista.length > 0) {
+                <div class="funciones-grid">
+                    @for (f of lista; track f.id) {
+                        <article class="funcion-card">
+
+                            <div class="funcion-fecha">
+                                <span class="dia">{{ f.fechaHoraInicio | fechaPipe: false  }}</span>
+                                <span class="horario">{{ f.fechaHoraInicio | date:'HH:mm' }} hs</span>
+                            </div>
+
+                            <div class="funcion-info">
+                                <p class="meta">
+                                    <span class="badge">{{ f.formato }}</span>
+
+                                    <span class="badge">{{ f.idioma }}</span>
+
+                                    @if (preventa()) {
+                                        <span class="badge preventa">Preventa</span>
+                                    }
+                                </p>
+
+                                <p class="precio">
+                                    @if (preventa()) {
+                                        <s class="precio-normal">{{ f.precio | precioArs }}</s>
+                                        {{ p.precioPreventa! | precioArs }}
+                                    } @else {
+                                        {{ f.precio | precioArs }}
+                                    }
+                                </p>
+
+                            </div>
+
+                            <a [routerLink]="['/funcion', f.id, 'butacas']">Elegir butacas</a>
+
+                        </article>
+                    }
+                </div>
+            } @else {
+                <p class="sin-funciones">No hay funciones programadas para esta película.</p>
+            }
+        }
+
+        <section class="resenas">
+            <h3>Reseñas</h3>
+
+            @if (resenas().length > 0) {
+                <p class="promedio">
+                    <app-estrellas [valor]="promedio()" [soloLectura]="true" />
+                    <strong>{{ promedio() | number:'1.1-1' }}</strong>
+                    ({{ resenas().length }} reseña{{ resenas().length > 1 ? 's' : '' }})
+                </p>
+
+                @for (r of resenas(); track r.id) {
+                    <article class="resena">
+                        <app-estrellas [valor]="r.estrellas" [soloLectura]="true" />
+                        @if (r.comentario) {
+                            <p class="comentario">{{ r.comentario }}</p>
+                        }
+                        <small>
+                            {{ r.fecha | fechaPipe: false }}
+                            @if (r.perfilId === perfil()?.id) { · Tu reseña }
+                        </small>
+                    </article>
+                }
+            } @else {
+                <p class="sin-resenas">Todavía no hay reseñas.</p>
+            }
+
+            @if (perfil()) {
+                <div class="resena-form">
+                    <h4>{{ miResena() ? 'Editá tu reseña' : 'Dejá tu reseña' }}</h4>
+
+                    <app-estrellas [(valor)]="estrellasNueva" />
+
+                    <textarea maxlength="300" rows="3" placeholder="Comentario corto (opcional)"
+                            [value]="comentarioNuevo()"
+                            (input)="comentarioNuevo.set($any($event.target).value)"></textarea>
+
+                    @if (errorResena(); as mensaje) {
+                        <p class="error-msg">{{ mensaje }}</p>
+                    }
+
+                    <button type="button" [disabled]="guardando()" (click)="guardarResena()">
+                        {{ guardando() ? 'Guardando...' : (miResena() ? 'Actualizar reseña' : 'Publicar reseña') }}
+                    </button>
+                </div>
+            } @else {
+                <p><a routerLink="/cuenta/login">Iniciá sesión</a> para dejar tu reseña.</p>
+            }
+        </section>
+
+    </section>
+
+    <a class="btn-volver" routerLink="/peliculas">Volver a la cartelera</a>
+
+} @else {
+    <p class="not-found">Película no encontrada</p>
+
+    <a class="btn-volver" routerLink="/peliculas">Volver a la cartelera</a>
+}
