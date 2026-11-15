@@ -1,1 +1,107 @@
-<p>Hola</p>
+<nav class="nav">
+    <div class="nav-container">
+
+        <a class="logo" routerLink="/peliculas">
+        <img src="/Logotipo-NEXO.png" alt="NEXO">
+        </a>
+
+        <ul class="nav-links">
+        <li><a routerLink="/peliculas" routerLinkActive="activo">Cartelera</a></li>
+        <li><a routerLink="/proximamente" routerLinkActive="activo">Próximamente</a></li>
+        </ul>
+
+        <div class="nav-acciones">
+        @if (perfilStore.perfil()) {
+            <app-campana></app-campana>
+        }
+
+        @if (perfilStore.perfil(); as perfil) {
+            <div class="dropdown">
+            <button 
+            class="btn btn-usuario" 
+            (click)="toggleMenu()"
+            >
+                <span class="rol-badge" [class.admin]="perfil.rol === 'admin'" [class.empleado]="perfil.rol === 'empleado'">
+                {{ perfil.rol }}
+                </span>
+                <span class="nombre">{{ perfil.nombre }}</span>
+                <span class="flecha">▼</span>
+            </button>
+
+            @if (menuAbierto()) {
+                <div class="dropdown-menu">
+                <div class="dropdown-header">
+                    <strong>{{ perfil.nombre }} {{ perfil.apellido }}</strong>
+                    <small>{{ perfil.puntos }} puntos · ${{ perfil.credito }} crédito</small>
+                </div>
+
+                <hr class="dropdown-sep">
+
+                <p class="dropdown-titulo">Mi cuenta</p>
+                <a routerLink="/cuenta/perfil" (click)="menuAbierto.set(false)">Mi perfil</a>
+                <a routerLink="/cuenta/puntos" (click)="menuAbierto.set(false)">Mis puntos</a>
+                <a routerLink="/cuenta/historial" (click)="menuAbierto.set(false)">Mis compras</a>
+                <a routerLink="/cuenta/mis-peliculas" (click)="menuAbierto.set(false)">Mis películas</a>
+                <a routerLink="/cuenta/proponer" (click)="menuAbierto.set(false)">Proponer película</a>
+
+                @if (perfilStore.secciones().length > 0) {
+                    <hr class="dropdown-sep">
+                    <p class="dropdown-titulo">Administración</p>
+                    @for (s of perfilStore.secciones(); track s.ruta) {
+                    <a [routerLink]="s.ruta" (click)="menuAbierto.set(false)">{{ s.texto }}</a>
+                    }
+                }
+
+                <hr class="dropdown-sep">
+                <button type="button" class="cerrar-sesion" (click)="cerrarSesion()">
+                    Cerrar sesión
+                </button>
+                </div>
+            }
+            </div>
+        } @else {
+            <a routerLink="/cuenta/login" class="btn btn-login">Iniciar sesión</a>
+        }
+
+        <button class="hamburguesa" (click)="toggleMenuMobile()" aria-label="Ver menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        </div>
+    </div>
+
+    @if (menuMobileAbierto()) {
+        <div class="nav-mobile">
+        <a routerLink="/peliculas" (click)="menuMobileAbierto.set(false)">Cartelera</a>
+        <a routerLink="/proximamente" (click)="menuMobileAbierto.set(false)">Próximamente</a>
+
+        @if (perfilStore.perfil(); as perfil) {
+            <hr class="mobile-sep">
+            <p class="mobile-titulo">Mi cuenta</p>
+            <a routerLink="/cuenta/perfil" (click)="menuMobileAbierto.set(false)">Mi perfil</a>
+            <a routerLink="/cuenta/puntos" (click)="menuMobileAbierto.set(false)">Mis puntos</a>
+            <a routerLink="/cuenta/historial" (click)="menuMobileAbierto.set(false)">Mis compras</a>
+            <a routerLink="/cuenta/mis-peliculas" (click)="menuMobileAbierto.set(false)">Mis películas</a>
+            <a routerLink="/cuenta/proponer" (click)="menuMobileAbierto.set(false)">Proponer película</a>
+
+            @if (perfilStore.secciones().length > 0) {
+            <hr class="mobile-sep">
+            <p class="mobile-titulo">Administración</p>
+            @for (s of perfilStore.secciones(); track s.ruta) {
+                <a [routerLink]="s.ruta" (click)="menuMobileAbierto.set(false)">{{ s.texto }}</a>
+            }
+            }
+
+            <hr class="mobile-sep">
+            <button type="button" class="cerrar-sesion" (click)="cerrarSesion()">Cerrar sesión</button>
+        } @else {
+            <hr class="mobile-sep">
+            <a routerLink="/cuenta/login" (click)="menuMobileAbierto.set(false)">Iniciar sesión</a>
+            <a routerLink="/cuenta/registro" (click)="menuMobileAbierto.set(false)">Crear cuenta</a>
+        }
+        </div>
+    }
+</nav>
+
+<router-outlet></router-outlet>

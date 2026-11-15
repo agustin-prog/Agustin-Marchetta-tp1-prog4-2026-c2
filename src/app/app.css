@@ -1,0 +1,336 @@
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--color-bg-nav);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 42px;
+    width: auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--color-surface);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.activo {
+    color: var(--color-surface-hover);
+    border-bottom-color: #e50914;
+}
+
+.nav-acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.btn {
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-login {
+    background: #e50914;
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-login:hover {
+    background: #f40612;
+}
+
+.btn-usuario {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.85rem;
+}
+
+.btn-usuario:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.rol-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    background: #2a2a3a;
+    color: #ccc;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+.rol-badge.admin {
+    background: #e50914;
+    color: #fff;
+}
+
+.rol-badge.empleado {
+    background: #f5c518;
+    color: #111;
+}
+
+.nombre {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.flecha {
+    font-size: 0.65rem;
+    color: var(--color-text-disabled);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 280px;
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+    padding: 0.4rem;
+    z-index: 1001;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+    padding: 0.6rem 0.75rem;
+}
+
+.dropdown-header strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.dropdown-header small {
+    display: block;
+    color: var(--color-text-disabled);
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+}
+
+.dropdown-sep {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 0.3rem 0;
+}
+
+.dropdown-titulo {
+    font-size: 0.68rem;
+    color: var(--color-text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0.4rem 0.75rem 0.2rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: background 0.15s, color 0.15s;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+
+.cerrar-sesion {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.cerrar-sesion:hover {
+    background: rgba(255, 107, 107, 0.08);
+}
+
+/* ========== PANTALLA MOVIL ========== */
+.hamburguesa {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburguesa span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.25s;
+}
+
+.nav-mobile {
+    display: none;
+    padding: 0.75rem;
+    background: #0f0f1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-mobile a {
+    display: block;
+    padding: 0.65rem 1rem;
+    color: #ddd;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.nav-mobile a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.mobile-sep {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 0.4rem 0;
+}
+
+.mobile-titulo {
+    font-size: 0.68rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0.3rem 1rem 0.15rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.nav-mobile .cerrar-sesion {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.nav-mobile .cerrar-sesion:hover {
+    background: rgba(255, 107, 107, 0.08);
+}
+
+@media (max-width: 989px) {
+    .nav-links {
+        display: none;
+    }
+
+    .nav-acciones .btn-usuario,
+    .nav-acciones .btn-login {
+        display: none;
+    }
+
+    .hamburguesa {
+        display: flex;
+    }
+
+    .nav-mobile {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 0.75rem;
+        height: 56px;
+    }
+
+    .logo img {
+        height: 36px;
+    }
+}
