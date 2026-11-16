@@ -1,0 +1,75 @@
+<div class="candy-pagina">
+
+    <header class="candy-header">
+        <h1>Candy bar</h1>
+        @if (compra.segundosRestantes() !== null) {
+            <p class="contador">⏱ Tu reserva vence en <strong>{{ compra.textoTiempo() }}</strong></p>
+        }
+    </header>
+
+    @if (comboStore.combos().length > 0) {
+        <section>
+            <h2>Combos destacados</h2>
+            <div class="grid-candy">
+                @for (c of comboStore.combosActivos(); track c.id) {
+                    <article class="item combo-destacado" [class.elegido]="compra.cantidadCombo(c.id) > 0">
+                        <span class="etiqueta-combo">COMBO</span>
+
+                        @if (c.imagenUrl) { 
+                            <img [src]="c.imagenUrl" [alt]="c.nombre" /> 
+                        }
+
+                        <h3>{{ c.nombre }}</h3>
+                        <p class="detalle">{{ descripcionCombo(c) }}</p>
+                        <p class="precio">{{ c.precio | precioArs }}</p>
+                        <div class="cantidad">
+                            <button type="button" (click)="compra.cambiarCombo(c.id, -1)"
+                                    [disabled]="compra.cantidadCombo(c.id) === 0">−</button>
+                            <span>{{ compra.cantidadCombo(c.id) }}</span>
+                            <button type="button" (click)="compra.cambiarCombo(c.id, 1)">+</button>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+
+    @for (cat of categorias(); track cat.id) {
+        <section>
+            <h2>{{ cat.nombre }}</h2>
+            <div class="grid-candy">
+                @for (p of cat.productos; track p.id) {
+                    <article class="item" [class.elegido]="compra.cantidadProducto(p.id) > 0">
+                        @if (p.imagenUrl) { 
+                            <img [src]="p.imagenUrl" [alt]="p.nombre" /> 
+                        }
+                        
+                        <h3>{{ p.nombre }}</h3>
+                        <p class="precio">{{ p.precio | precioArs }}</p>
+                        <div class="cantidad">
+                            <button type="button" (click)="compra.cambiarProducto(p.id, -1)"
+                                    [disabled]="compra.cantidadProducto(p.id) === 0">−</button>
+                            <span>{{ compra.cantidadProducto(p.id) }}</span>
+                            <button type="button" (click)="compra.cambiarProducto(p.id, 1)">+</button>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    } @empty {
+        @if (comboStore.combosActivos().length === 0) {
+            <p class="vacio">Por ahora no hay productos en el candy bar.</p>
+        }
+    }
+
+    <aside class="resumen">
+        <p>Entradas ({{ compra.butacaIds().length }}): {{ compra.totalEntradas() | precioArs }}</p>
+        <p>Candy: {{ compra.totalCandy() | precioArs }}</p>
+        <p class="total">Total: <strong>{{ compra.total() | precioArs }}</strong></p>
+
+        <div class="acciones">
+            <button type="button" (click)="volver()">← Volver a butacas</button>
+            <button type="button" class="btn-confirmar" (click)="irAlPago()">Continuar al pago</button>
+        </div>
+    </aside>
+</div>
