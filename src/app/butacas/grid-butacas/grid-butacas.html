@@ -1,0 +1,29 @@
+<div class="grilla">
+  @for (fila of matriz(); track $index; let fi = $index) {
+    <div class="fila">
+      <span class="fila-letra">{{ 'ABCDEFGHIJKLMNOPQRST'[fi] }}</span>
+
+      @for (sector of fila; track $index; let si = $index) {
+        @if (sector.length > 0) {
+          <div class="sector">
+            @for (butaca of sector; track butaca.id) {
+              <button
+                type="button"
+                class="butaca"
+                [class.butaca-vip]="butaca.tipo === 'VIP'"
+                [class.butaca-accesible]="butaca.tipo === 'accesible'"
+                [class.butaca-ocupada]="estaOcupada()(butaca)"
+                [class.butaca-seleccionada]="estaSeleccionada()(butaca)"
+                [disabled]="estaOcupada()(butaca)"
+                (click)="elegirButaca.emit(butaca)"
+                [title]="'Fila ' + butaca.letraFila + ' - Sector ' + butaca.sector + ' - N° ' + butaca.numero + ' (' + butaca.tipo + ')'"
+              >
+                {{ butaca.numero }}
+              </button>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

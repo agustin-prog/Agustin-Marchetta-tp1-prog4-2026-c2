@@ -1,0 +1,124 @@
+@if (funcion(); as f) {
+  <div class="butacas-pagina">
+
+    <div class="butacas-header">
+      <h1>Elige tus butacas</h1>
+      <div class="funcion-info">
+        @if (segundosRestantes() !== null) {
+          <p class="contador">Tu reserva vence en <strong>{{ textoTiempo() }}</strong></p>
+        }
+
+        <span>{{ f.formato }}</span>
+        <span>{{ f.idioma }}</span>
+        <span>{{ f.fechaHoraInicio | fechaPipe: false }}</span>
+        @if (edadMinima() > 0) {
+          <span class="badge restriccion">+{{ edadMinima() }}</span>
+        }
+        <span class="precio-base">{{ precioBase() | precioArs }}</span>
+      </div>
+      <a class="btn-volver" routerLink="/peliculas/{{ f.peliculaId }}">← Volver al detalle</a>
+    </div>
+
+    <!-- Leyenda -->
+    <div class="leyenda">
+      <span class="leyenda-item"><span class="swatch butaca-libre"></span> Libre</span>
+      <span class="leyenda-item"><span class="swatch butaca-vip"></span> VIP (x1.5)</span>
+      <span class="leyenda-item"><span class="swatch butaca-accesible"></span> Accesible</span>
+      <span class="leyenda-item"><span class="swatch butaca-ocupada"></span> Ocupada</span>
+      <span class="leyenda-item"><span class="swatch butaca-seleccionada"></span> Seleccionada</span>
+    </div>
+
+    <!-- Lista de espera -->
+    @if (turnoPendiente(); as t) {
+      <div class="espera espera-turno">
+        <p><strong>¡Es tu turno!</strong> Se liberó una butaca para vos. Tenés <strong>{{ textoTurno() }}</strong> para tomarla y comprar.</p>
+        <button type="button" class="btn-confirmar" [disabled]="procesando()" (click)="tomarTurno()">
+          Tomar mi butaca
+        </button>
+        <button type="button" class="btn-secundario" [disabled]="procesando()" (click)="salirDeLaLista()">
+          Salir de la lista
+        </button>
+      </div>
+    } @else if (miEspera(); as e) {
+      <div class="espera">
+        @if (e.estado === 'esperando') {
+          <p>Estás en la lista de espera: posición <strong>{{ e.posicion }}</strong>. Te avisamos si se libera una butaca.</p>
+        } @else {
+          <p>Tenés la butaca de la lista de espera.</p>
+        }
+        <button type="button" class="btn-secundario" [disabled]="procesando()" (click)="salirDeLaLista()">
+          Salir de la lista
+        </button>
+      </div>
+    } @else if (agotada()) {
+      <div class="espera">
+        <p>Esta función está <strong>agotada</strong>.</p>
+        @if (perfil()) {
+          @if (puedeAnotarse()) {
+            <p>Podés anotarte en la lista de espera: si se libera una butaca, te la retenemos 15 minutos.</p>
+            <button type="button" class="btn-confirmar" [disabled]="procesando()" (click)="anotarme()">
+              Anotarme en la lista de espera
+            </button>
+          }
+        } @else {
+          <a routerLink="/cuenta/login">Iniciá sesión para anotarte en la lista de espera</a>
+        }
+      </div>
+    }
+
+    @if (errorMsg() && seleccionadas().length === 0) {
+      <p class="error-msg">{{ errorMsg() }}</p>
+    }
+
+    <!-- Layout: grid + resumen -->
+    <div class="butacas-layout">
+      <div class="butacas-grid-col">
+        <div class="pantalla">PANTALLA</div>
+        <app-grid-butacas
+          [matriz]="matriz()"
+          [estaOcupada]="estaOcupadaFn"
+          [estaSeleccionada]="estaSeleccionadaFn"
+          (elegirButaca)="elegirButaca($event)" />
+      </div>
+
+      <aside class="butacas-resumen-col">
+        <div class="seleccion-resumen">
+          @if (seleccionadas().length > 0) {
+            <p class="resumen-texto">
+              {{ seleccionadas().length }} butaca{{ seleccionadas().length > 1 ? 's' : '' }} seleccionada{{ seleccionadas().length > 1 ? 's' : '' }}
+            </p>
+
+            @if (!seleccionValida()) {
+              <p class="error-msg">Las butacas deben ser contiguas en la misma fila y sector</p>
+            }
+
+            <p class="total">
+              Total: <strong>{{ total() | precioArs }}</strong>
+            </p>
+
+            @if(errorMsg()){
+              <p class="error-msg">{{ errorMsg() }}</p>
+            }
+
+            <button class="btn-confirmar" [disabled]="!seleccionValida()" (click)="continuar()">
+              Continuar
+            </button>
+          } @else {
+            <p class="sin-seleccion">Seleccioná butacas para continuar</p>
+          }
+        </div>
+      </aside>
+    </div>
+
+  </div>
+
+  @if (modalEdad()) {
+    <app-modal-edad
+      [edadMinima]="edadMinima()"
+      [peliculaNombre]="pelicula()?.nombre ?? ''"
+      (confirmar)="alConfirmarEdad($event)"
+      (cancelar)="modalEdad.set(false)" />
+  }
+} @else {
+  <p class="not-found">Función no encontrada</p>
+}

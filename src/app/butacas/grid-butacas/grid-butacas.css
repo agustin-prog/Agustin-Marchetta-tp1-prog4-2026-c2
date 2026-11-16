@@ -1,0 +1,93 @@
+.grilla {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  width: max-content;
+  min-width: 100%;
+  padding: 0.5rem 0;
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fila-letra {
+  width: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+.sector {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.butaca {
+  width: 22px;
+  height: 22px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-color: var(--color-bg-tertiary);
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.butaca:hover:not(.butaca-ocupada) {
+  border-color: var(--color-highlight);
+  transform: scale(1.08);
+}
+
+.butaca-vip {
+  background: #f5c518;
+  border-color: #f5c518;
+  color: #111;
+}
+
+.butaca-vip:hover:not(.butaca-ocupada) {
+  border-color: var(--color-highlight);
+}
+
+.butaca-accesible {
+  background: var(--color-blue);
+  border-color: var(--color-blue);
+  color: #fff;
+}
+
+.butaca-accesible:hover:not(.butaca-ocupada) {
+  border-color: var(--color-highlight);
+}
+
+.butaca-ocupada {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-bg-tertiary);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.butaca-seleccionada {
+  background: var(--color-highlight);
+  border-color: var(--color-highlight);
+  color: var(--color-text-dark);
+  transform: scale(1.12);
+}
+
+.butaca:disabled {
+  cursor: not-allowed;
+}
