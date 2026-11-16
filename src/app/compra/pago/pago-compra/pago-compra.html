@@ -1,0 +1,101 @@
+<div class="pago-pagina">
+
+    <header>
+        <h1>Resumen y pago</h1>
+        @if (compra.segundosRestantes() !== null) {
+            <p class="contador">⏱ Tu reserva vence en <strong>{{ compra.textoTiempo() }}</strong></p>
+        }
+    </header>
+
+    <section class="desglose">
+        <p>
+            <span>Entradas ({{ compra.butacaIds().length }})</span>
+            <span>{{ compra.totalEntradas() | precioArs }}</span>
+        </p>
+        <p>
+            <span>Candy bar</span>
+            <span>{{ compra.totalCandy() | precioArs }}</span>
+        </p>
+
+        @if (compra.usarEntradaGratis() && compra.descuentoEntradaGratis() > 0) {
+            <p class="descuento"><span>Entrada gratis (canje)</span>
+            <span>−{{ compra.descuentoEntradaGratis() | precioArs }}</span></p>
+        }
+
+        @if (compra.cuponAplicado(); as cupon) {
+            <p class="descuento"><span>{{ cupon.nombre }} (−{{ cupon.porcentaje }}%)</span>
+            <span>−{{ compra.descuento() | precioArs }}</span></p>
+        }
+
+        @if (compra.usarCredito()) {
+            <p class="descuento">
+                <span>Crédito aplicado</span>
+                <span>−{{ compra.creditoAplicado() | precioArs }}</span>
+            </p>
+        }
+
+        <p class="total">
+            <span>Total a pagar</span>
+            <strong>{{ compra.totalFinal() | precioArs }}</strong>
+        </p>
+    </section>
+
+    @if (compra.cuponBienvenida()) {
+        <p class="aviso">🎁 Tu cupón de bienvenida se aplica automáticamente a tu primera compra.</p>
+    }
+
+    @if (perfil()) {
+        @if (compra.creditoDisponible() > 0) {
+            <label class="credito">
+                <input type="checkbox" [checked]="compra.usarCredito()"
+                        (change)="compra.usarCredito.set($any($event.target).checked)" />
+                Usar mi crédito ({{ compra.creditoDisponible() | precioArs }} disponible)
+            </label>
+        }
+
+        @if (compra.entradasGratis() > 0) {
+            <label class="credito">
+                <input type="checkbox" [checked]="compra.usarEntradaGratis()"
+                    (change)="compra.usarEntradaGratis.set($any($event.target).checked)" />
+                Usar una entrada gratis ({{ compra.entradasGratis() }} disponible{{ compra.entradasGratis() > 1 ? 's' : '' }})
+            </label>
+        }
+
+        @if (!compra.cuponBienvenida() && compra.cuponesElegibles().length > 0) {
+            <label class="credito">
+                Usar un cupón
+                <select [value]="compra.cuponElegidoId() ?? ''" (change)="compra.elegirCupon($any($event.target).value)">
+                    <option value="">Sin cupón</option>
+                    @for (c of compra.cuponesElegibles(); track c.id) {
+                        <option [value]="c.id">{{ c.nombre }} (−{{ c.porcentaje }}%)</option>
+                    }
+                </select>
+            </label>
+        }
+        
+    } @else {
+        <p class="aviso">¿Querés sumar puntos y recibir un cupón de bienvenida?
+            <a routerLink="/cuenta/registro">Creá tu cuenta</a> antes de comprar.</p>
+    }
+
+    <fieldset class="metodos">
+        <legend>Método de pago (simulado)</legend>
+        @for (m of metodos; track m) {
+            <label>
+                <input type="radio" name="metodo" [checked]="metodo() === m" (change)="metodo.set(m)" />
+                {{ m }}
+            </label>
+        }
+    </fieldset>
+
+    @if (errorMsg(); as mensaje) {
+        <p class="error-msg">{{ mensaje }}</p>
+    }
+
+    <div class="acciones">
+        <button type="button" (click)="volver()" [disabled]="cargando()">← Volver al candy</button>
+        <button type="button" class="btn-confirmar" [disabled]="cargando()" (click)="pagar()">
+            {{ cargando() ? 'Procesando pago...' : 'Pagar ' + (compra.totalFinal() | precioArs )}}
+        </button>
+    </div>
+</div>
