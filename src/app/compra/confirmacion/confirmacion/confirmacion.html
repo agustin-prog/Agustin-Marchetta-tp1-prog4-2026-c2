@@ -1,0 +1,41 @@
+<div class="confirmacion-pagina">
+    <div class="confirmacion-card">
+        <div class="exito-icono">✅</div>
+        <h1 class="confirmacion-titulo">¡Compra exitosa!</h1>
+
+        <p class="confirmacion-sub">Tu compra ha sido registrada correctamente</p>
+
+        <div class="qr-container">
+            <p class="qr-label">Tu código QR:</p>
+            @if (qrImagen(); as imagen) {
+                <img class="qr-imagen" [src]="imagen" alt="Código QR de tu compra" />
+            } @else {
+                <p class="qr-cargando">Generando código...</p>
+            }
+            <p class="qr-codigo">{{ qr() }}</p>
+        </div>
+
+        <p class="confirmacion-nota">
+            Presentá este código al ingresar al cine.<br>
+            El empleado lo va a escanear para validar tu entrada.
+        </p>
+
+        <button type="button" class="btn-acento" (click)="descargarPdf()" [disabled]="!qrImagen()">
+            Descargar comprobante (PDF)
+        </button>
+
+        <div class="botones">
+
+            @if (!cancelada()) {
+                <button type="button" (click)="cancelar()" [disabled]="cancelando()">
+                    {{ cancelando() ? 'Cancelando...' : 'Cancelar compra' }}
+                </button>
+            }
+            @if (resultado(); as texto) { <p class="confirmacion-nota">{{ texto }}</p> }
+            @if (errorCancelar(); as texto) { <p class="error-msg">{{ texto }}</p> }
+
+            <a routerLink="/peliculas" class="btn-acento">Ver más películas</a>
+            <a routerLink="/cuenta/mis-peliculas" class="btn-social">Mis películas</a>
+        </div>
+    </div>
+</div>

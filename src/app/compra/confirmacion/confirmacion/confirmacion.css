@@ -1,0 +1,125 @@
+.confirmacion-pagina {
+  display: grid;
+  place-items: center;
+  min-height: 80vh;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.confirmacion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
+  background: var(--color-surface-dark);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.exito-icono {
+  font-size: 3rem;
+}
+
+.confirmacion-titulo {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--color-text);
+}
+
+.confirmacion-sub {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--color-border);
+}
+
+.qr-label {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.qr-imagen {
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+
+.qr-cargando {
+  color: var(--color-text-disabled);
+  font-size: var(--text-sm);
+}
+
+.qr-codigo {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  word-break: break-all;
+  margin: 0;
+}
+
+.confirmacion-nota {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.botones {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.botones a,
+.botones button {
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.btn-acento {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+}
+
+.btn-acento:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-social {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.error-msg {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(237, 37, 78, 0.15);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+}
