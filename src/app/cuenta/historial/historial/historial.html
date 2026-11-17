@@ -1,0 +1,61 @@
+<section class="historial">
+    <h2>Mis compras</h2>
+
+    @if (!perfil()) {
+        <p>Iniciá sesión para ver tus compras. <a routerLink="/cuenta/login">Iniciar sesión</a></p>
+    } @else {
+        
+        <p class="saldo">Crédito disponible: <strong>{{ perfil()!.credito | precioArs }}</strong></p>
+
+        @if (mensaje(); as texto) { <p class="aviso ok">{{ texto }}</p> }
+        @if (error(); as texto) { <p class="error">{{ texto }}</p> }
+
+        @if (ventas() === null) {
+            <p class="cargando">Cargando...</p>
+        } @else {
+            @for (v of ventas(); track v.id) {
+                    <article class="compra" [class.cancelada]="v.estado === 'cancelada'">
+
+                @if (v.posterUrl) {
+                    <img class="poster" [src]="v.posterUrl" [alt]="v.pelicula" />
+                }
+
+                <div class="datos">
+                    <h3>
+                    {{ v.pelicula || 'Canje de recompensa' }}
+                    @if (v.estado === 'cancelada') { <span class="badge">Cancelada</span> }
+                    </h3>
+
+                    @if (v.pelicula) {
+                    <p>{{ v.sala }} · {{ v.formato }} · {{ v.idioma }}</p>
+                    <p>{{ v.fechaHoraInicio | fechaPipe }} hs</p>
+                    <p>Butacas: {{ v.butacas.join(', ') }}</p>
+                    }
+
+                    @if (v.candy.length > 0) { <p>Candy: {{ v.candy.join(', ') }}</p> }
+                    <p class="total">Total: <strong>{{ v.total | precioArs }}</strong></p>
+                    <p class="chico">Comprada el {{ v.creadaEn | fechaPipe }}</p>
+
+                    @if (v.estado === 'activa') {
+                    <div class="acciones">
+                        <button type="button" class="btn-secundario" (click)="descargar(v)">Descargar comprobante (PDF)</button>
+
+                        @if (puedeCancelar(v)) {
+                        <button type="button" class="btn-peligro"
+                                [disabled]="cancelando() === v.id"
+                                (click)="cancelar(v)">
+                            {{ cancelando() === v.id ? 'Cancelando...' : 'Cancelar compra' }}
+                        </button>
+                        } @else {
+                        <span class="chico">{{ motivoNoCancelable(v) }}</span>
+                        }
+                    </div>
+                    }
+                </div>
+                </article>
+            } @empty {
+                <p class="vacio">Todavía no hiciste ninguna compra. <a routerLink="/peliculas">Ver cartelera</a></p>
+            }
+        }
+    }
+</section>
