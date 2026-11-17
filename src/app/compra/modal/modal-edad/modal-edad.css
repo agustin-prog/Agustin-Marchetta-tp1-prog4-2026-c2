@@ -1,0 +1,131 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: grid;
+    place-items: center;
+    z-index: 100;
+    padding: var(--space-md);
+}
+
+.modal {
+    background: var(--color-surface-dark);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.modal h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.modal p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.form input {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    padding: 0.65rem 0.75rem;
+    font-size: var(--text-base);
+}
+
+.form input:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+}
+
+.error-msg {
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(237, 37, 78, 0.15);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+}
+
+.acciones {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+}
+
+.acciones button {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.acciones button[type="submit"] {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+}
+
+.acciones button[type="button"] {
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.aviso {
+    font-size: var(--text-xs);
+    color: var(--color-text-disabled);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .overlay {
+        padding: var(--space-sm);
+    }
+
+    .modal {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    .modal h2 {
+        font-size: var(--text-xl);
+    }
+
+    .acciones {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .acciones button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,31 @@
+<div class="overlay" (click)="cancelar.emit()">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-edad"
+        (click)="$event.stopPropagation()">
+
+        <h2 id="titulo-edad">Verificá tu edad</h2>
+        <p>
+            «{{ peliculaNombre() }}» es para mayores de {{ edadMinima() }} años.
+            Indicá tu fecha de nacimiento para continuar.
+        </p>
+
+        <form [formRoot]="edadForm" class="form">
+            <label>
+                Fecha de nacimiento
+                <input type="date" [formField]="edadForm.fechaNacimiento" />
+            </label>
+
+            @if (edadForm.fechaNacimiento().touched()) {
+                @for (e of edadForm.fechaNacimiento().errors(); track e.kind) {
+                    <p class="error-msg">{{ e.message }}</p>
+                }
+            }
+
+            <div class="acciones">
+                <button type="button" (click)="cancelar.emit()">Cancelar</button>
+                <button type="submit">Continuar</button>
+            </div>
+        </form>
+
+        <p class="aviso">Según la restricción de la película, deberás asistir acompañado por un adulto.</p>
+    </div>
+</div>
