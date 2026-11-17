@@ -1,0 +1,32 @@
+<section class="validar-input">
+    <h2>Validar compra</h2>
+
+    <div class="camara">
+        <video #video [hidden]="!escaneando()"></video>
+
+        @if (escaneando()) {
+            <button type="button" class="btn-secundario" (click)="detenerCamara()">Cerrar cámara</button>
+        } @else {
+            <button type="button" class="btn-camara" (click)="iniciarCamara()">Escanear con la cámara</button>
+        }
+    </div>
+
+    <form [formRoot]="validarForm" class="form">
+        <label>
+            Código QR (si el lector no funciona)
+            <input type="text" [formField]="validarForm.codigo" placeholder="Pegá o escribí el código" />
+        </label>
+
+        @if (validarForm.codigo().touched()) {
+            @for (e of validarForm.codigo().errors(); track e.kind) {
+                <p class="error">{{ e.message }}</p>
+            }
+        }
+
+        @if (error(); as mensaje) {
+            <p class="error">{{ mensaje }}</p>
+        }
+
+        <button type="submit" class="btn-submit">Buscar</button>
+    </form>
+</section>

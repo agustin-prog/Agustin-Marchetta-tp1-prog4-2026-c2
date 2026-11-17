@@ -1,0 +1,104 @@
+.validar-input {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.validar-input h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.camara {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+}
+
+.camara video {
+    width: 100%;
+    max-width: 360px;
+    border-radius: var(--radius-md);
+    background: #000;
+}
+
+.btn-camara {
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-camara:hover {
+    background: var(--color-primary-hover);
+}
+
+.btn-secundario {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.form input {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    padding: 0.65rem 0.75rem;
+    font-size: var(--text-base);
+}
+
+.form input:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+}
+
+.btn-submit {
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.error {
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(237, 37, 78, 0.15);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+}

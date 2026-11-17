@@ -1,0 +1,85 @@
+.validacion {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.volver {
+    color: var(--color-primary-light);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    width: fit-content;
+}
+
+.encabezado h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.encabezado p {
+    margin: 0;
+    color: var(--color-text-muted);
+}
+
+.validacion h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-sm);
+    margin: 0;
+}
+
+.estado {
+    margin: 0;
+    color: var(--color-text-muted);
+}
+
+.vacio,
+.cargando {
+    color: var(--color-text-muted);
+}
+
+.ok {
+    background: rgba(0, 255, 134, 0.08);
+    border-left: 3px solid var(--color-success);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-success);
+    font-size: var(--text-sm);
+}
+
+.error {
+    background: rgba(237, 37, 78, 0.15);
+    border-left: 3px solid var(--color-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+}
+
+.acciones {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.acciones button {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.acciones button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

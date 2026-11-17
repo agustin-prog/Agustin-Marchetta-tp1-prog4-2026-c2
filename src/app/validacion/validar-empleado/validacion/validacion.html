@@ -1,0 +1,57 @@
+<section class="validacion">
+    <a routerLink="/empleado/validar" class="volver">← Otro código</a>
+
+    @if (venta() === undefined) {
+        <p class="cargando">Cargando...</p>
+    } @else if (venta(); as v) {
+
+        @if (bloqueada()) {
+            <p class="error">Este código ya fue utilizado: todas sus prestaciones fueron consumidas.</p>
+        } @else if (v.estado === 'cancelada') {
+            <p class="error">Esta compra fue cancelada.</p>
+        } @else {
+
+        <header class="encabezado">
+            <h2>{{ v.pelicula || 'Canje de recompensa' }}</h2>
+            
+            @if (v.pelicula) {
+                <p>{{ v.sala }} · {{ v.fechaHoraInicio | fechaPipe: false }}</p>
+            }
+        </header>
+
+        <h3>Entradas ({{ v.entradasTotal }})</h3>
+        <p>Butacas: {{ v.butacas.join(', ') }}</p>
+        <p class="estado">
+            {{ v.entradasPendientes === 0 ? 'Validadas' : 'Pendientes: ' + v.entradasPendientes }}
+        </p>
+
+        <h3>Candy</h3>
+        @for (c of v.candy; track $index) {
+            <p class="estado">{{ c.cantidad }} x {{ c.nombre }} — {{ c.validada ? 'Entregado' : 'Pendiente' }}</p>
+        } @empty {
+            <p class="vacio">Esta compra no incluye candy.</p>
+        }
+
+        @if (completa()) {
+            <p class="ok">Todas las prestaciones ya fueron usadas.</p>
+        }
+
+        @if (error(); as mensaje) {
+            <p class="error">{{ mensaje }}</p>
+        }
+
+        <div class="acciones">
+            <button type="button" (click)="validarEntrada()"
+                    [disabled]="procesando() || v.entradasPendientes === 0">
+            Validar entrada
+            </button>
+            <button type="button" (click)="validarCandy()"
+                    [disabled]="procesando() || v.candyPendientes === 0">
+            Validar candy
+            </button>
+        </div>
+        }
+    } @else {
+        <p class="error">Código no encontrado.</p>
+    }
+</section>
