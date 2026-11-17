@@ -30,6 +30,19 @@ export interface FuncionFormInput {
 
 export type FuncionInput = Omit<FuncionModel, 'id' | 'cancelada'>;
 
+export interface FuncionRow {
+    id: number;
+    pelicula_id: number;
+    sala_id: number;
+    fecha_hora_inicio: string;
+    formato: Formato;
+    idioma: Idioma;
+    precio: number;
+    cancelada: boolean;
+}
+
+export type FuncionRowWrite = Omit<FuncionRow, 'id' | 'cancelada'>;
+
 export interface ResumenCancelacion {
     comprasRegistradas: number;
     comprasAnonimas: number;
