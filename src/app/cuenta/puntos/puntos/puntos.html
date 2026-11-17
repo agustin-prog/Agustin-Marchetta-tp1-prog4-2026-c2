@@ -1,0 +1,53 @@
+<section class="cuenta">
+    <h2>Mis puntos</h2>
+
+    @if (!perfil()) {
+        <p>Iniciá sesión para ver y canjear tus puntos. <a routerLink="/cuenta/login">Iniciar sesión</a></p>
+    } @else {
+
+        <p class="saldo">Tenés <strong>{{ perfil()!.puntos }}</strong> puntos</p>
+        <p class="ayuda">Sumás 1 punto por cada peso que pagás. Los puntos no se pueden transferir.</p>
+
+        @if (mensaje(); as texto) { <p class="ok">{{ texto }}</p> }
+        @if (error(); as texto) { <p class="error-msg">{{ texto }}</p> }
+
+        <h3>Recompensas</h3>
+        <div class="grid-recompensas">
+            @for (r of recompensas(); track r.id) {
+                <article class="recompensa">
+                    <h4>{{ r.nombre }}</h4>
+                    <p>{{ r.costoPuntos }} puntos</p>
+                    <button type="button"
+                            [disabled]="!puedeCanjear(r) || canjeando() === r.id"
+                            (click)="canjear(r)">
+                        {{ canjeando() === r.id ? 'Canjeando...' : (puedeCanjear(r) ? 'Canjear' : 'Puntos insuficientes') }}
+                    </button>
+                </article>
+            } @empty {
+                <p class="vacio">Por ahora no hay recompensas disponibles.</p>
+            }
+        </div>
+
+        <h3>Historial de canjes</h3>
+        @if (canjes() === null) {
+            <p>Cargando...</p>
+        } @else {
+            <ul class="canjes">
+                @for (c of canjes(); track c.id) {
+                    <li>
+                        <div>
+                            <strong>{{ c.recompensa }}</strong>
+                            <span class="chico">{{ c.fecha | fechaPipe }} · {{ c.costoPuntos }} puntos</span>
+                            <span class="estado">{{ c.estado }}</span>
+                        </div>
+                        @if (c.qr && c.estado === 'Pendiente de retiro') {
+                            <button type="button" (click)="descargar(c)">Descargar código (PDF)</button>
+                        }
+                    </li>
+                } @empty {
+                    <li class="vacio">Todavía no canjeaste ninguna recompensa.</li>
+                }
+            </ul>
+        }
+    }
+</section>

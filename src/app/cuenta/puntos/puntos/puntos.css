@@ -1,0 +1,148 @@
+.cuenta {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.cuenta h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.cuenta h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-sm);
+    margin: 0;
+}
+
+.saldo {
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.saldo strong {
+    color: var(--color-highlight);
+}
+
+.ayuda {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin: 0;
+}
+
+.ok {
+    background: rgba(0, 255, 134, 0.08);
+    border-left: 3px solid var(--color-success);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-success);
+    font-size: var(--text-sm);
+}
+
+.error-msg {
+    background: rgba(237, 37, 78, 0.15);
+    border-left: 3px solid var(--color-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+}
+
+.grid-recompensas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.recompensa {
+    background: var(--color-surface-dark);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.recompensa h4 {
+    margin: 0;
+    color: var(--color-text);
+}
+
+.recompensa p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.recompensa button {
+    margin-top: auto;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.recompensa button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.canjes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.canjes li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.canjes li div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.chico {
+    color: var(--color-text-disabled);
+    font-size: var(--text-xs);
+}
+
+.estado {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+}
+
+.canjes button {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    font-size: var(--text-sm);
+}
+
+.vacio {
+    color: var(--color-text-muted);
+}
