@@ -1,0 +1,15 @@
+@if (propuestas().length > 0) {
+    <section class="propuestas">
+        <h3>Mis propuestas</h3>
+
+        <ul class="lista">
+        @for (p of propuestas(); track p.id) {
+            <li>
+                <strong>{{ p.titulo }}</strong>
+                <span class="estado {{ p.estado }}">{{ etiqueta(p.estado) }}</span>
+                <small>{{ p.fecha | fechaPipe }}</small>
+            </li>
+        }
+        </ul>
+    </section>
+}
