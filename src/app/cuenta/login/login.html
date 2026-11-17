@@ -1,10 +1,10 @@
-<section class="cuenta-pagina">
+<section class="pagina-login">
 
-    <form class="form-card" (submit)="$event.preventDefault(); iniciarSesion()">
+    <form class="tarjeta-login" (submit)="$event.preventDefault(); iniciarSesion()">
 
-        <h1 class="form-card__titulo">Iniciar sesión</h1>
+        <h1 class="titulo">Iniciar sesión</h1>
 
-        <label class="form-card__campo">
+        <label class="campo">
             <span>Email</span>
             <input
                 type="email"
@@ -16,7 +16,7 @@
             />
         </label>
 
-        <label class="form-card__campo">
+        <label class="campo">
             <span>Contraseña</span>
             <input
                 type="password"
@@ -29,20 +29,20 @@
         </label>
 
         @if (errorMsg(); as msg) {
-            <p class="form-card__error">{{ msg }}</p>
+            <p class="error">{{ msg }}</p>
         }
 
-        <button class="btn-acento" type="submit" [disabled]="cargando()">
+        <button class="btn-entrar" type="submit" [disabled]="cargando()">
             {{ cargando() ? "Ingresando..." : "Ingresar" }}
         </button>
 
-        <div class="divider"><span>o continuá con</span></div>
+        <div class="separador"><span>o continuá con</span></div>
 
-        <button class="btn-social" type="button" (click)="conGitHub()" [disabled]="cargando()">
+        <button class="btn-github" type="button" (click)="conGitHub()" [disabled]="cargando()">
             Continuar con GitHub
         </button>
 
-        <p class="form-card__pie">
+        <p class="pie-form">
             ¿No tenés cuenta?
             <a routerLink="/cuenta/registro">Creá una acá</a>
         </p>
