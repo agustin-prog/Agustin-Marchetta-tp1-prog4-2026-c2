@@ -1,0 +1,91 @@
+.campana { 
+  position: relative; 
+  display: inline-block; 
+  margin-right: var(--space-sm); 
+}
+
+.campana_btn { 
+  position: relative; 
+  background: none; 
+  border: none; 
+  font-size: var(--text-xl); 
+  cursor: pointer; 
+}
+
+.campana_contador {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--text-xs);
+  line-height: 18px;
+  text-align: center;
+}
+.campana_panel {
+  position: absolute;
+  right: 0;
+  top: 2.2rem;
+  z-index: 50;
+  width: 320px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: var(--color-surface-dark);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+.campana_cabecera { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: var(--space-sm) var(--space-md); 
+  border-bottom: 1px solid var(--color-border); 
+}
+
+.campana_link { 
+  background: none; border: 
+  none; 
+  color: var(--color-primary-light); 
+  cursor: pointer; 
+  font-size: var(--text-xs); 
+}
+
+.campana_item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  color: var(--color-text);
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+}
+.campana_item:hover { 
+  background: var(--color-bg-tertiary); 
+}
+
+.campana_item.sin-leer { 
+  background: var(--color-bg-secondary); 
+}
+
+.campana_item span { 
+  font-size: var(--text-sm); 
+}
+
+.campana_item small { 
+  color: var(--color-text-disabled); 
+}
+
+.campana_vacio { 
+  padding: var(--space-md); 
+  text-align: center; 
+  color: var(--color-text-muted); 
+}

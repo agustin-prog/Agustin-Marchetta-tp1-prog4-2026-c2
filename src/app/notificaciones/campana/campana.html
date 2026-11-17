@@ -1,0 +1,30 @@
+<div class="campana">
+    <button type="button" class="campana_btn" aria-label="Notificaciones"
+            (click)="abierto.update(a => !a)">
+        🔔
+        @if (store.noLeidas() > 0) {
+            <span class="campana_contador">{{ store.noLeidas() }}</span>
+        }
+    </button>
+
+    @if (abierto()) {
+        <div class="campana_panel">
+            <div class="campana_cabecera">
+                <strong>Notificaciones</strong>
+                @if (store.noLeidas() > 0) {
+                    <button type="button" class="campana_link" (click)="marcarTodas()">Marcar todas como leídas</button>
+                }
+            </div>
+
+            @for (n of store.lista(); track n.id) {
+                <button type="button" class="campana_item" [class.sin-leer]="!n.leida" (click)="abrir(n)">
+                    <strong>{{ n.titulo }}</strong>
+                    <span>{{ n.mensaje }}</span>
+                    <small>{{ n.createdAt | fechaPipe }}</small>
+                </button>
+            } @empty {
+                <p class="campana_vacio">No tenés notificaciones.</p>
+            }
+        </div>
+    }
+</div>
