@@ -1,0 +1,16 @@
+.estrella { 
+    background: none; 
+    border: 0; 
+    padding: 0 1px; 
+    font-size: 1.4rem; 
+    color: #bbb; 
+    cursor: pointer; 
+}
+
+.estrella.llena { 
+    color: #f4b400; 
+}
+
+.estrella:disabled { 
+    cursor: default; 
+}

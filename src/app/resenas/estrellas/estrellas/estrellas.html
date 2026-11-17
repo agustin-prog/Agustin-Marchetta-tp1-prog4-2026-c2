@@ -1,0 +1,9 @@
+<span class="estrellas">
+    @for (n of numeros; track n) {
+        <button type="button" class="estrella"
+                [class.llena]="n <= llenas()"
+                [disabled]="soloLectura()"
+                [attr.aria-label]="n + ' de 5'"
+                (click)="elegir(n)">★</button>
+    }
+</span>
