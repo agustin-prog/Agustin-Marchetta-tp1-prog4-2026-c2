@@ -1,0 +1,62 @@
+<section class="proponer">
+  <h2>Proponer una película</h2>
+
+  @if (perfil()) {
+
+    @if (enviada()) {
+      <p class="aviso ok">¡Gracias! Tu propuesta fue enviada. Te avisaremos cuando la respondamos.</p>
+    }
+
+    @if (pendiente()) {
+      <p class="ayuda">Ya tenés una propuesta pendiente. Podrás enviar otra cuando el cine la responda.</p>
+    } @else {
+      <p class="ayuda">Contanos qué película te gustaría ver en el cine. Solo podés tener una pendiente a la vez.</p>
+
+      <form [formRoot]="propuestaForm" class="form">
+
+        <label>
+          Título de la película
+          <input type="text" [formField]="propuestaForm.titulo" />
+        </label>
+        @if (propuestaForm.titulo().touched()) {
+          @for (e of propuestaForm.titulo().errors(); track e.kind) { 
+            <p class="error">{{ e.message }}</p> 
+          }
+        }
+
+        <label>
+          Descripción
+          <textarea rows="4" [formField]="propuestaForm.descripcion"></textarea>
+        </label>
+        @if (propuestaForm.descripcion().touched()) {
+          @for (e of propuestaForm.descripcion().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+        }
+
+        <label>
+          ¿Por qué querés que se proyecte en el cine?
+          <textarea rows="3" [formField]="propuestaForm.motivo"></textarea>
+        </label>
+        @if (propuestaForm.motivo().touched()) {
+          @for (e of propuestaForm.motivo().errors(); track e.kind) { 
+            <p class="error">{{ e.message }}</p> 
+          }
+        }
+
+        @if (errorEnvio(); as mensaje) { <p class="error">{{ mensaje }}</p> }
+
+        <button type="submit" [disabled]="enviando()">
+          {{ enviando() ? 'Enviando...' : 'Enviar propuesta' }}
+        </button>
+      </form>
+    }
+
+    <app-estado-propuesta />
+
+  } @else {
+    <p>
+      Para proponer una película tenés que
+      <a routerLink="/cuenta/login">iniciar sesión</a> o
+      <a routerLink="/cuenta/registro">crear una cuenta</a>.
+    </p>
+  }
+</section>
