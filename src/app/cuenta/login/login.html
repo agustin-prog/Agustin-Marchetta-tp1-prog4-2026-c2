@@ -1,0 +1,52 @@
+<section class="cuenta-pagina">
+
+    <form class="form-card" (submit)="$event.preventDefault(); iniciarSesion()">
+
+        <h1 class="form-card__titulo">Iniciar sesión</h1>
+
+        <label class="form-card__campo">
+            <span>Email</span>
+            <input
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="tu@email.com"
+                [value]="email()"
+                (input)="email.set($any($event.target).value)"
+            />
+        </label>
+
+        <label class="form-card__campo">
+            <span>Contraseña</span>
+            <input
+                type="password"
+                required
+                autocomplete="current-password"
+                placeholder="••••••••"
+                [value]="password()"
+                (input)="password.set($any($event.target).value)"
+            />
+        </label>
+
+        @if (errorMsg(); as msg) {
+            <p class="form-card__error">{{ msg }}</p>
+        }
+
+        <button class="btn-acento" type="submit" [disabled]="cargando()">
+            {{ cargando() ? "Ingresando..." : "Ingresar" }}
+        </button>
+
+        <div class="divider"><span>o continuá con</span></div>
+
+        <button class="btn-social" type="button" (click)="conGitHub()" [disabled]="cargando()">
+            Continuar con GitHub
+        </button>
+
+        <p class="form-card__pie">
+            ¿No tenés cuenta?
+            <a routerLink="/cuenta/registro">Creá una acá</a>
+        </p>
+
+    </form>
+
+</section>
