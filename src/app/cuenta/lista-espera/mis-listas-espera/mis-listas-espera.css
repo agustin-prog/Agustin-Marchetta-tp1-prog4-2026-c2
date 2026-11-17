@@ -1,0 +1,53 @@
+.espera {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.espera-item {
+    background: var(--color-surface-dark);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.espera-item strong {
+    color: var(--color-text);
+}
+
+.espera-item span {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.espera-item p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.espera-item button {
+    align-self: flex-start;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+}
+
+.vacio {
+    color: var(--color-text-muted);
+}
+
+.error {
+    background: rgba(237, 37, 78, 0.15);
+    border-left: 3px solid var(--color-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+}

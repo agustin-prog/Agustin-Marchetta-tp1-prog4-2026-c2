@@ -1,0 +1,25 @@
+<section class="espera">
+    @for (l of listas(); track l.id) {
+        <article class="espera-item">
+        <a [routerLink]="['/peliculas', l.peliculaId]"><strong>{{ l.pelicula }}</strong></a>
+        <span>{{ l.fechaHoraInicio | fechaPipe }} · {{ l.formato }}</span>
+
+        @if (l.estado === 'notificado') {
+            <p>
+                <strong>¡Es tu turno!</strong> Tenés una butaca retenida.
+                <a [routerLink]="['/funcion', l.funcionId, 'butacas']">Ir a comprarla →</a>
+            </p>
+        } @else {
+            <p>Posición en la lista: <strong>{{ l.posicion }}</strong></p>
+        }
+
+        <button type="button" (click)="salir(l.funcionId)">Salir de la lista</button>
+        </article>
+    } @empty {
+        <p class="vacio">No estás en ninguna lista de espera.</p>
+    }
+
+    @if (error()) { 
+        <p class="error">{{ error() }}</p> 
+    }
+</section>
