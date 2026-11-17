@@ -1,0 +1,60 @@
+<section class="cuenta">
+    <h2>Mi perfil</h2>
+
+    @if (perfil(); as p) {
+        <div class="resumen">
+
+            <div class="tarjeta">
+                <span class="etiqueta">Puntos</span>
+                <strong>{{ p.puntos }}</strong>
+                <a routerLink="/cuenta/puntos">Canjear →</a>
+            </div>
+
+            <div class="tarjeta">
+                <span class="etiqueta">Crédito</span>
+                <strong>{{ p.credito | precioArs }}</strong>
+                <a routerLink="/cuenta/historial">Mis compras →</a>
+            </div>
+
+            <div class="tarjeta">
+                <span class="etiqueta">Películas vistas</span>
+                <a routerLink="/cuenta/mis-peliculas">Ver →</a>
+            </div>
+
+        </div>
+
+        <h3>Datos personales</h3>
+        <dl class="datos">
+            <dt>Email</dt><dd>{{ auth.session()?.user?.email }}</dd>
+            <dt>Nombre</dt><dd>{{ p.nombre ?? '—' }} {{ p.apellido ?? '' }}</dd>
+            <dt>Fecha de nacimiento</dt>
+            <dd>@if (p.fechaNacimiento) { {{ p.fechaNacimiento | fechaPipe: false }} } @else { — }</dd>
+            <dt>Edad</dt><dd>{{ p.fechaNacimiento | edad }} años</dd>
+            <dt>Tipo de sangre</dt><dd>{{ p.tipoSangre || '—' }}</dd>
+            <dt>Color de ojos</dt><dd>{{ p.colorOjos || '—' }}</dd>
+            <dt>Días de vacaciones</dt><dd>{{ p.diasVacaciones ?? '—' }}</dd>
+        </dl>
+
+        <h3>Mis calificaciones</h3>
+        @for (r of resenas(); track r.id) {
+
+            <article class="resena">
+                <a [routerLink]="['/peliculas', r.peliculaId]"><strong>{{ r.pelicula }}</strong></a>
+                <app-estrellas [valor]="r.estrellas" [soloLectura]="true" />
+                @if (r.comentario) { <p>{{ r.comentario }}</p> }
+                <small>{{ r.fecha | fechaPipe }}</small>
+            </article>
+            
+        } @empty {
+            <p class="vacio">Todavía no calificaste ninguna película.</p>
+        }
+
+        <h3>Mis propuestas</h3>
+        <app-estado-propuesta />
+
+        <h3>Mi lista de espera</h3>
+        <app-mis-listas-espera />
+    } @else {
+        <p>Iniciá sesión para ver tu perfil. <a routerLink="/cuenta/login">Iniciar sesión</a></p>
+    }
+</section>
