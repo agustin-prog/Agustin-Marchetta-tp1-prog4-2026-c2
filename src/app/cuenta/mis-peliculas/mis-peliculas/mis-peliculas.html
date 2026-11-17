@@ -1,0 +1,33 @@
+<section class="cuenta">
+    <h2>Mis películas</h2>
+
+    @if (!perfil()) {
+        <p>Iniciá sesión para ver tus películas. <a routerLink="/cuenta/login">Iniciar sesión</a></p>
+    } @else if (vistas() === null) {
+        <p class="cargando">Cargando...</p>
+    } @else {
+        <p class="ayuda">Acá aparecen las películas cuyas entradas ya validaste en el ingreso al cine.</p>
+
+        <div class="grid-peliculas">
+        @for (v of vistas(); track v.funcionId) {
+            <article class="vista">
+
+                <a [routerLink]="['/peliculas', v.peliculaId]">
+                    @if (v.posterUrl) { <img class="poster" [src]="v.posterUrl" [alt]="v.nombre" /> }
+                    <h3>{{ v.nombre }}</h3>
+                </a>
+                <p class="fecha">{{ v.fecha | fechaPipe }}</p>
+
+                @if (estrellasDe(v.peliculaId); as estrellas) {
+                    <app-estrellas [valor]="estrellas" [soloLectura]="true" />
+                } @else {
+                    <a class="calificar" [routerLink]="['/peliculas', v.peliculaId]">Calificar</a>
+                }
+
+            </article>
+        } @empty {
+            <p class="vacio">Todavía no tenés películas vistas. <a routerLink="/peliculas">Ver cartelera</a></p>
+        }
+        </div>
+    }
+</section>
