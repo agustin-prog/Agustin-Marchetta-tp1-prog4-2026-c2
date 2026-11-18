@@ -7,7 +7,7 @@ import { ProductoStore } from '../candy/producto.store';
 import { ComboStore } from '../candy/combo.store';
 import { enPreventa } from '../peliculas/pelicula-estado';
 import { PerfilStore } from '../perfiles/perfil.store';
-import { CuponBienvenida, CuponStore } from '../cupones/cupon.store';
+import { CuponBienvenida } from '../cupones/cupon.store';
 import { CuponDisponible } from '../cupones/cupon-regla.model';
 import { CompraEnCursoReservaService } from './services/compra-en-curso-reserva.service';
 import { CompraEnCursoDescuentosService } from './services/compra.en-curso-descuentos.service';

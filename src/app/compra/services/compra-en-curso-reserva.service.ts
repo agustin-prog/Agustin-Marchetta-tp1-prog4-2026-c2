@@ -1,11 +1,9 @@
 import { inject, Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { ButacaOcupacionStore } from "../../butacas/butacaOcupacion.store";
 
 @Injectable({ providedIn: "root" })
 export class CompraEnCursoReservaService {
 
-    private readonly router = inject(Router);
     private readonly ocupacion = inject(ButacaOcupacionStore);
     
     fijarReserva( store: any, funcionId: number, butacaIds: number[], segundos: number | null ): void {

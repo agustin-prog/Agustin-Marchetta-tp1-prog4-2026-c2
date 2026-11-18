@@ -2,7 +2,7 @@ import { Component, effect, inject, input, numberAttribute, OnDestroy, signal } 
 import { Router, RouterLink } from '@angular/router';
 import { CompraEnCursoStore } from '../../compra-en-curso.store';
 import { PerfilStore } from '../../../perfiles/perfil.store';
-import { mensajeDeError } from '../../../errores';
+import { mensajeDeError } from '../../../shared/errores';
 import { PrecioArsPipe } from '../../../pipes/pipe-precio-ars/precio-ars-pipe';
 
 @Component({

@@ -4,7 +4,7 @@ import { toDataURL } from 'qrcode';
 import { jsPDF } from 'jspdf';
 import { VentaStore } from '../../../ventas/venta.store';
 import { PerfilStore } from '../../../perfiles/perfil.store';
-import { mensajeDeError } from '../../../errores';
+import { mensajeDeError } from '../../../shared/errores';
 
 @Component({
   imports: [RouterLink],

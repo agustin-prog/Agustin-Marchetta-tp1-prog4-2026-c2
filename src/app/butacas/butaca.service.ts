@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '../supabase.client';
-import { ButacaModel, ButacaPayload } from './butaca.model';
+import { ButacaModel } from './butaca.model';
 import { generarButacas } from './butaca-generador';
 
 export interface ButacaRow {
