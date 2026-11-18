@@ -1,0 +1,15 @@
+<div class="selector">
+  <div class="botones">
+    <button type="button" (click)="elegir(0)">Hoy</button>
+    <button type="button" (click)="elegir(1)">Mañana</button>
+    <button type="button" (click)="elegir(proximoSabado())">Sábado</button>
+    <button type="button" (click)="elegir(proximoDomingo())">Domingo</button>
+  </div>
+  <input
+    class="fecha"
+    type="text"
+    placeholder="DD/MM/AAAA"
+    [value]="texto"
+    (input)="escribir($event)"
+  />
+</div>
