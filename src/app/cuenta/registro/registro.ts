@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -11,7 +11,6 @@ import { AuthService } from '../../auth/auth.service';
 export class CuentaRegistro {
 
   private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
 
   protected readonly email = signal('');
   protected readonly password = signal('');

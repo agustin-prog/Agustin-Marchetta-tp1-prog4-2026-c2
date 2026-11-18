@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { VentaStore } from '../../../ventas/venta.store';
 import { PerfilStore } from '../../../perfiles/perfil.store';
 import { puedeCancelar, VentaModel } from '../../../ventas/venta.model';
-import { mensajeDeError } from '../../../errores';
+import { mensajeDeError } from '../../../shared/errores';
 import { descargarComprobante } from '../../../compra/comprobante';
 import { FechaPipe } from '../../../pipes/pipe-fecha/fecha-pipe';
 import { PrecioArsPipe } from '../../../pipes/pipe-precio-ars/precio-ars-pipe';

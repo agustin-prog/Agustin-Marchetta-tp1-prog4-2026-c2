@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { RecompensaStore } from '../../../fidelizacion/recompensa.store';
 import { PerfilStore } from '../../../perfiles/perfil.store';
 import { CanjeModel, RecompensaModel } from '../../../fidelizacion/recompensa.model';
-import { mensajeDeError } from '../../../errores';
+import { mensajeDeError } from '../../../shared/errores';
 import { descargarComprobante } from '../../../compra/comprobante';
 import { FechaPipe } from '../../../pipes/pipe-fecha/fecha-pipe';
 

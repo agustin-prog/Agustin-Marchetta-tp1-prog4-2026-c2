@@ -1,5 +1,5 @@
 import { Component, inject, signal } from "@angular/core";
-import { mensajeDeError } from "../../../errores";
+import { mensajeDeError } from "../../../shared/errores";
 import { form, FormField, FormRoot, maxLength, minLength, required } from "@angular/forms/signals";
 import { RouterLink } from "@angular/router";
 import { EstadoPropuesta } from "../estado-propuesta/estado-propuesta";
