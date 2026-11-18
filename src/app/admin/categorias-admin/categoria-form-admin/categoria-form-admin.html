@@ -1,0 +1,37 @@
+<section class="pagina">
+  <h2 class="titulo">Categorías</h2>
+
+  <form [formRoot]="categoriaForm" class="fila">
+
+    <input type="text" placeholder="Nombre de la categoría" [formField]="categoriaForm.nombre" />
+    <div class="botones">
+      <button class="boton" type="submit">{{ editandoId() === null ? 'Agregar' : 'Guardar cambios' }}</button>
+
+      @if (editandoId() !== null) { 
+        <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button> 
+      }
+
+    </div>
+
+  </form>
+
+  @if (categoriaForm.nombre().touched()) {
+    @for (e of categoriaForm.nombre().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+  }
+  
+  @if (error(); as mensaje) { <p class="error">{{ mensaje }}</p> }
+
+  <ul class="lista">
+    @for (c of store.categorias(); track c.id) {
+      <li>
+        <span>{{ c.nombre }}</span>
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(c)">Editar</button>
+          <button type="button" class="boton peligro" (click)="eliminar(c)">Eliminar</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="vacio">Todavía no hay categorías.</li>
+    }
+  </ul>
+</section>
