@@ -1,0 +1,19 @@
+<section class="pagina">
+  <h2 class="titulo">Películas</h2>
+
+  <div class="botones">
+    <a class="boton" routerLink="/admin/peliculas/nueva">Crear película</a>
+  </div>
+
+  @if (error(); as mensaje) {
+    <p class="error">{{ mensaje }}</p>
+  }
+
+  <div class="grid">
+    @for (p of peliculas(); track p.id) {
+      <app-pelicula-card-admin [pelicula]="p" (onBorrarError)="error.set($event)" />
+    } @empty {
+      <p class="vacio">No hay películas cargadas.</p>
+    }
+  </div>
+</section>
