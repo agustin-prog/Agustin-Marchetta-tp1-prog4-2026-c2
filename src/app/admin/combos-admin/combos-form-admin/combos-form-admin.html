@@ -1,0 +1,124 @@
+<section class="pagina">
+  <h2 class="titulo">Combos</h2>
+
+  @if (productoStore.productos().length === 0) {
+    <p class="texto">Primero creá algunos <a routerLink="/admin/candy/productos">productos</a>.</p>
+  }
+
+  <form [formRoot]="comboForm" class="form">
+    <label class="campo">
+      Nombre
+      <input type="text" [formField]="comboForm.nombre" />
+    </label>
+
+    @if (comboForm.nombre().touched()) {
+      @for (e of comboForm.nombre().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    <div class="caja">
+      <h3>Productos del combo</h3>
+
+      <div class="fila">
+        <select [value]="itemProducto()" (change)="itemProducto.set($any($event.target).value)">
+
+          <option value="">Elegí un producto</option>
+          @for (p of productoStore.productos(); track p.id) { 
+            <option [value]="p.id">{{ p.nombre }}</option> 
+          }
+
+        </select>
+        <input type="number" min="1" [value]="itemCantidad()" (input)="itemCantidad.set($any($event.target).valueAsNumber)" />
+        <button type="button" class="boton secundario" (click)="agregarItem()">Agregar</button>
+        
+      </div>
+
+      <ul class="lista">
+        @for (i of itemsDetallados(); track i.productoId) {
+          <li>
+            <span>{{ i.cantidad }} x {{ i.nombre }}</span>
+            <button type="button" class="boton secundario" (click)="quitarItem(i.productoId)">Quitar</button>
+          </li>
+        }
+      </ul>
+
+      @if (comboForm.items().touched()) {
+        @for (e of comboForm.items().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+
+      @if (valorSeparado() > 0) { 
+        <p class="texto">Por separado: {{ valorSeparado() | precioArs }}</p> 
+      }
+    </div>
+
+    <label class="campo">
+      Precio del combo
+      <input type="number" [formField]="comboForm.precio" />
+    </label>
+    @if (comboForm.precio().touched()) {
+      @for (e of comboForm.precio().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+    }
+
+    <label class="campo">
+      Imagen
+      <input type="file" accept="image/jpeg,image/png,image/webp" (change)="alElegirImagen($event)" />
+    </label>
+    @if (subiendo()) { 
+      <p class="texto">Subiendo imagen...</p> 
+    }
+
+    @if (errorImagen(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+    @if (comboForm.imagenUrl().value(); as url) { 
+      <img class="preview" [src]="url" alt="Vista previa" /> 
+    }
+
+    @if (error(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+    <div class="botones">
+      <button class="boton" type="submit" [disabled]="subiendo()">{{ editandoId() === null ? 'Crear combo' : 'Guardar cambios' }}</button>
+      @if (editandoId() !== null) { <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button> }
+    </div>
+  </form>
+
+  <div class="grid">
+    @for (c of store.combos(); track c.id) {
+
+      <article class="caja" [class.apagado]="!c.activo">
+
+        @if (c.imagenUrl) { 
+          <img [src]="c.imagenUrl" [alt]="c.nombre" /> 
+        }
+
+        <h3>{{ c.nombre }} 
+          @if (!c.activo) { 
+            <small>(inactivo)</small> 
+          }
+        </h3>
+
+        <p class="texto">
+          @for (i of c.items; track i.productoId; let ultimo = $last) { 
+            {{ i.cantidad }} x {{ nombreProducto(i.productoId) }}{{ ultimo ? '' : ', ' }} 
+          }
+        </p>
+
+        <p>
+          <strong>{{ c.precio | precioArs }}</strong>
+        </p>
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(c)">Editar</button>
+          <button type="button" class="boton secundario" (click)="cambiarActivo(c)">{{ c.activo ? 'Desactivar' : 'Activar' }}</button>
+          <button type="button" class="boton peligro" (click)="eliminar(c)">Eliminar</button>
+        </div>
+      </article>
+
+    } @empty {
+      <p class="vacio">Todavía no hay combos.</p>
+    }
+  </div>
+</section>
