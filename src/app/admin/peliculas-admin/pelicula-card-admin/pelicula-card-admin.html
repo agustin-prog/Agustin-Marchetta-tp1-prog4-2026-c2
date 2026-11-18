@@ -1,0 +1,18 @@
+@if (pelicula(); as p) {
+  <article class="caja">
+
+    <img [src]="poster()" [alt]="p.nombre" />
+    <h3>{{ nombre() }}</h3>
+
+    <p class="meta"><small>Géneros: {{ p.generos.map(g => g.nombre).join(', ') }}</small></p>
+    
+    <div class="botones">
+      <a class="boton secundario" [routerLink]="['/admin/peliculas', p.id, 'editar']">Editar</a>
+      <a class="boton secundario" [routerLink]="['/admin/funciones', p.id]">Funciones</a>
+      <button class="boton peligro" (click)="borrarPelicula(p.id)">Eliminar</button>
+    </div>
+
+  </article>
+} @else {
+  <p class="vacio">Cargando película...</p>
+}
