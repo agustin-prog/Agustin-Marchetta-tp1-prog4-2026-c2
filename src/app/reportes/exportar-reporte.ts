@@ -42,6 +42,8 @@ export async function descargarExcel(t: TablaReporte, nombreArchivo: string, per
     ])),
   );
 
+  filas.unshift({ [t.columnas[0]?.titulo ?? 'Período']: periodo });
+
   const hoja = XLSX.utils.json_to_sheet(filas);
   hoja['!cols'] = t.columnas.map(() => ({ wch: 22 }));
   const libro = XLSX.utils.book_new();
