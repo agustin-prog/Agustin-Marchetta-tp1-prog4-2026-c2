@@ -1,0 +1,121 @@
+<section class="pagina">
+  <h2 class="titulo">Cupones</h2>
+
+  <div class="caja">
+    <h3>Cupón de bienvenida</h3>
+    <p class="texto">Se entrega al registrarse y se aplica solo en la primera compra.</p>
+
+    <form [formRoot]="bienvenidaForm" class="fila">
+      <input type="number" [formField]="bienvenidaForm.porcentaje" />
+      <span>%</span>
+      <button class="boton" type="submit">Guardar</button>
+    </form>
+
+    @if (bienvenidaForm.porcentaje().touched()) {
+      @for (e of bienvenidaForm.porcentaje().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+    }
+
+    @if (bienvenidaGuardada()) { 
+      <p class="ok">Guardado.</p> 
+    }
+
+    @if (errorBienvenida(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+  </div>
+
+  <h3>{{ editandoId() === null ? 'Nuevo cupón por reglas' : 'Editar cupón' }}</h3>
+  <p class="texto">El sistema le entrega el cupón a cada cliente que cumpla las condiciones.</p>
+
+  <form [formRoot]="reglaForm" class="form">
+    <label class="campo">
+      Nombre
+      <input type="text" [formField]="reglaForm.nombre" />
+    </label>
+    @if (reglaForm.nombre().touched()) {
+      @for (e of reglaForm.nombre().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+    }
+
+    <label class="campo">
+      Descuento (%)
+      <input type="number" [formField]="reglaForm.descuento" />
+    </label>
+    @if (reglaForm.descuento().touched()) {
+      @for (e of reglaForm.descuento().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+    }
+
+    <div class="caja">
+
+      <h3>Condiciones</h3>
+      <label class="campo">
+        Edad mínima
+        <input type="text" inputmode="numeric" placeholder="Ej: 50" [formField]="reglaForm.edadMinima" />
+      </label>
+      @if (reglaForm.edadMinima().touched()) {
+        @for (e of reglaForm.edadMinima().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+
+      <label class="campo">
+        Monto mínimo de compra ($)
+        <input type="text" inputmode="numeric" placeholder="Ej: 10000" [formField]="reglaForm.montoMinimo" />
+      </label>
+      @if (reglaForm.montoMinimo().touched()) {
+        @for (e of reglaForm.montoMinimo().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+
+      <label class="permiso">
+        <input type="checkbox" [formField]="reglaForm.soloPrimeraCompra" />
+        Solo para la primera compra
+      </label>
+
+      <div class="fila">
+
+        <label class="campo">
+          Vigente desde
+          <input type="date" [formField]="reglaForm.vigenteDesde" />
+        </label>
+
+        <label class="campo">
+          Vigente hasta
+          <input type="date" [formField]="reglaForm.vigenteHasta" />
+        </label>
+
+      </div>
+      @if (reglaForm.vigenteHasta().touched()) {
+        @for (e of reglaForm.vigenteHasta().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+    </div>
+
+    @if (error(); as mensaje) { <p class="error">{{ mensaje }}</p> }
+
+    <div class="botones">
+      <button class="boton" type="submit">{{ editandoId() === null ? 'Crear cupón' : 'Guardar cambios' }}</button>
+
+      @if (editandoId() !== null) { 
+        <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button> 
+      }
+    </div>
+  </form>
+
+  <ul class="lista">
+    @for (r of store.reglas(); track r.id) {
+      <li [class.apagado]="!r.activo">
+
+        <div class="meta">
+          <strong>{{ r.nombre }} — {{ r.descuentoPorcentaje }}%</strong>
+          <small>{{ condiciones(r) }}</small>
+        </div>
+        
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(r)">Editar</button>
+          <button type="button" class="boton secundario" (click)="cambiarActivo(r)">{{ r.activo ? 'Desactivar' : 'Activar' }}</button>
+          <button type="button" class="boton peligro" (click)="eliminar(r)">Eliminar</button>
+        </div>
+        
+      </li>
+    } @empty {
+      <li class="vacio">Todavía no hay cupones por reglas.</li>
+    }
+  </ul>
+</section>
