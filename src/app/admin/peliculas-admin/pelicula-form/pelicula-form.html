@@ -1,0 +1,104 @@
+<section class="pagina">
+  <h2 class="titulo">{{ peliculaId() === undefined ? 'Nueva película' : 'Editar película' }}</h2>
+
+  <form [formRoot]="peliculaForm" class="form">
+
+    <div class="caja">
+      <h3>Datos</h3>
+      <label class="campo">
+        Nombre
+        <input type="text" [formField]="peliculaForm.nombre" />
+      </label>
+      @if (peliculaForm.nombre().touched()) {
+        @for (e of peliculaForm.nombre().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+
+      <label class="campo">
+        Sinopsis
+        <textarea rows="4" [formField]="peliculaForm.sinopsis"></textarea>
+      </label>
+      @if (peliculaForm.sinopsis().touched()) {
+        @for (e of peliculaForm.sinopsis().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+
+      <div class="fila">
+        <label class="campo">
+          Duración (minutos)
+          <input type="number" [formField]="peliculaForm.duracionMinutos" />
+        </label>
+        @if (peliculaForm.duracionMinutos().touched()) {
+          @for (e of peliculaForm.duracionMinutos().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+        }
+
+        <label class="campo">
+          Restricción de edad
+          <select [formField]="peliculaForm.restriccionEdad">
+            @for (r of restricciones; track r) { <option [value]="r">{{ r }}</option> }
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="caja">
+      <h3>Géneros</h3>
+      <div class="botones">
+        @for (g of generos(); track g.id) {
+          <button
+            type="button"
+            class="boton secundario"
+            [class.activo]="idsSeleccionados().has(g.id)"
+            (click)="alternarGenero(g.id)"
+          >
+            {{ g.nombre }}
+          </button>
+        }
+      </div>
+
+      @if (peliculaForm.generoIds().touched()) {
+        @for (e of peliculaForm.generoIds().errors(); track e.kind) { <p class="error">{{ e.message }}</p> }
+      }
+    </div>
+
+    <div class="caja">
+      <h3>Póster y estreno</h3>
+      <label class="campo">
+        Póster
+        <input type="file" accept="image/jpeg,image/png,image/webp" (change)="alElegirPoster($event)" />
+      </label>
+
+      @if (subiendoPoster()) { <p class="texto">Subiendo imagen...</p> }
+      @if (errorPoster(); as mensaje) { <p class="error">{{ mensaje }}</p> }
+      @if (peliculaForm.posterUrl().value(); as url) {
+        <img class="preview" [src]="url" alt="Vista previa del póster" />
+      }
+
+      <div class="fila">
+        <label class="campo">
+          Fecha de estreno
+          <input type="date" [formField]="peliculaForm.fechaEstreno" />
+        </label>
+
+        <label class="permiso">
+          <input type="checkbox" [formField]="peliculaForm.preventaHabilitada" />
+          Preventa habilitada
+        </label>
+      </div>
+
+      @if (peliculaForm.preventaHabilitada().value()) {
+        <label class="campo">
+          Precio de preventa
+          <input type="number" [formField]="peliculaForm.precioPreventa" />
+        </label>
+      }
+    </div>
+
+    @if (errorGuardado(); as mensaje) { <p class="error">{{ mensaje }}</p> }
+
+    <div class="botones">
+      <button type="submit" class="boton" [disabled]="guardando() || subiendoPoster()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <a class="boton secundario" routerLink="/admin/peliculas">Cancelar</a>
+    </div>
+  </form>
+</section>
