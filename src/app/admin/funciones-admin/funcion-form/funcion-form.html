@@ -1,0 +1,140 @@
+<section class="pagina">
+  <h2 class="titulo">Crear funciones de {{ pelicula()?.nombre ?? '...' }}</h2>
+
+  @if (pelicula(); as p) {
+    <p class="texto">Duración: {{ p.duracionMinutos }} min + {{ limpiezaMin }} min de espera entre funciones</p>
+  }
+
+  <form [formRoot]="funcionForm" class="form">
+
+    <div class="caja">
+      <h3>Días</h3>
+
+      <div class="fila">
+        <label class="campo">
+          Desde el día
+          <app-selector-fecha [value]="funcionForm.fechaDesde().value()" (valueChange)="setFecha('fechaDesde', $any($event))" />
+        </label>
+        <label class="campo">
+          Hasta el día
+          <app-selector-fecha [value]="funcionForm.fechaHasta().value()" (valueChange)="setFecha('fechaHasta', $any($event))" />
+        </label>
+      </div>
+
+      @if (funcionForm.fechaDesde().touched()) {
+        @for (e of funcionForm.fechaDesde().errors(); track e.kind) { 
+          <p class="error">{{ e.message }}</p> 
+        }
+      }
+
+      @if (funcionForm.fechaHasta().touched()) {
+        @for (e of funcionForm.fechaHasta().errors(); track e.kind) { 
+          <p class="error">{{ e.message }}</p> 
+        }
+      }
+    </div>
+
+    <div class="caja">
+      <h3>Funciones por día</h3>
+      <p class="texto">Elegí cuántas funciones por día y a qué hora empieza cada una. El cine abre de {{ apertura }} a {{ cierre }}.</p>
+
+      <label class="campo">
+        Cantidad de funciones por día
+        <input type="number" [formField]="funcionForm.cantidad" />
+      </label>
+      @if (funcionForm.cantidad().touched()) {
+        @for (e of funcionForm.cantidad().errors(); track e.kind) { 
+          <p class="error">{{ e.message }}</p> 
+        }
+      }
+
+      <div class="fila">
+        @for (i of indices(); track i) {
+          <label class="campo">
+            Función {{ i + 1 }}
+            <input type="time" [value]="horarios()[i]" (input)="setHorario(i, $any($event.target).value)" />
+          </label>
+        }
+      </div>
+
+      @if (errorHorarios(); as mensaje) {
+        <p class="error">{{ mensaje }}</p>
+      }
+    </div>
+
+    <div class="caja">
+      <h3>Detalles</h3>
+
+      <div class="fila">
+        <label class="campo">
+          Formato
+          <select [formField]="funcionForm.formato">
+            @for (f of formatos; track f) { <option [value]="f">{{ f }}</option> }
+          </select>
+        </label>
+      
+        <label class="campo">
+          Idioma
+          <select [formField]="funcionForm.idioma">
+            @for (i of idiomas; track i) { <option [value]="i">{{ i }}</option> }
+          </select>
+        </label>
+
+        <label class="campo">
+          Precio
+          <input type="number" [formField]="funcionForm.precio" />
+        </label>
+
+      </div>
+      @if (funcionForm.precio().touched()) {
+        @for (e of funcionForm.precio().errors(); track e.kind) {
+          <p class="error">{{ e.message }}</p> 
+        }
+      }
+    </div>
+
+    <div class="caja">
+      <h3>Vista previa: {{ previa().length }} funciones</h3>
+
+      @if (diasIncompletos().length > 0) {
+        <p class="texto">Algunos horarios no se pudieron agendar:</p>
+        <ul class="lista">
+          @for (d of diasIncompletos(); track d.dia) {
+            <li>
+              <div class="meta">
+                <strong>{{ d.dia | fechaPipe: false }}: {{ d.creadas }} de {{ d.pedidas }}</strong>
+                <small>{{ d.omitidos.map(o => o.hora + ' (' + o.motivo + ')').join(', ') }}</small>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+
+      @if (previa().length > 0) {
+        <ul class="lista">
+          @for (f of previa(); track f.fechaHoraInicio + '-' + f.salaId) {
+            <li>
+              <div class="meta">
+                <strong>{{ f.fechaHoraInicio | fechaPipe }}</strong>
+                <small>{{ nombreSala(f.salaId) }}</small>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="texto">Completá los días y el horario para ver cómo quedarían.</p>
+      }
+    </div>
+
+    @if (errorGuardado(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+    <div class="botones">
+      <button class="boton" type="submit" [disabled]="guardando() || previa().length === 0">
+        {{ guardando() ? 'Guardando...' : 'Crear ' + previa().length + ' funciones' }}
+      </button>
+      <a class="boton secundario" [routerLink]="['/admin/funciones', peliculaId()]">Cancelar</a>
+    </div>
+  </form>
+</section>
