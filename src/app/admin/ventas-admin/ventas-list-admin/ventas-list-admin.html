@@ -1,0 +1,67 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Ventas</h2>
+
+  <div class="fila">
+    <label class="campo">Desde
+      <input type="date" [value]="desde()" (change)="desde.set($any($event.target).value)" />
+    </label>
+
+    <label class="campo">Hasta
+      <input type="date" [value]="hasta()" (change)="hasta.set($any($event.target).value)" />
+    </label>
+
+    <label class="campo">Estado
+      <select [value]="estado()" (change)="estado.set($any($event.target).value)">
+        <option value="todas">Todas</option>
+        <option value="activas">No canceladas</option>
+        <option value="canceladas">Canceladas</option>
+      </select>
+    </label>
+
+    <button type="button" class="boton" (click)="buscar()">Buscar</button>
+  </div>
+
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  @if (ventas(); as lista) {
+    <p class="texto">{{ lista.length }} ventas. Cobrado en las no canceladas: <strong>{{ moneda(totalCobrado()) }}</strong></p>
+
+    <div class="scroll">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Película</th>
+            <th>Función</th>
+            <th class="num">Entradas</th>
+            <th>Candy</th>
+            th class="num">Total</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          @for (v of lista; track v.id) {
+            <tr [class.apagado]="v.estado === 'cancelada'">
+              <td>{{ v.fecha | fechaPipe }}</td>
+              <td>{{ v.cliente }}</td>
+              <td>{{ v.pelicula }}</td>
+              <td>{{ v.funcion ? (v.funcion | fechaPipe) : '—' }}</td>
+              <td class="num">{{ v.entradas }}</td>
+              <td>{{ v.conCandy ? 'Sí' : 'No' }}</td>
+              <td class="num">{{ moneda(v.total) }}</td>
+              <td>{{ v.estado }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="vacio">No hay ventas con esos filtros.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="vacio">Cargando ventas...</p>
+  }
+</section>
