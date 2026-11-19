@@ -1,0 +1,36 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Lista de espera</h2>
+
+  @if (error()) { 
+    <p class="error">{{ error() }}</p> 
+  }
+
+  <div class="scroll">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Película</th>
+          <th>Sala</th>
+          <th>Función</th>
+          <th>Formato</th>
+          <th>Esperando</th>
+          <th>Con turno</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of funciones(); track f.funcionId) {
+          <tr>
+            <td>{{ f.pelicula }}</td>
+            <td>{{ f.sala }}</td>
+            <td>{{ f.fechaHoraInicio | fechaPipe }}</td>
+            <td>{{ f.formato }}</td>
+            <td><strong>{{ f.esperando }}</strong></td>
+            <td>{{ f.conTurno }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="6" class="vacio">No hay personas en lista de espera.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
