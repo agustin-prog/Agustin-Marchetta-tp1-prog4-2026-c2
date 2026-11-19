@@ -1,0 +1,91 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Reportes</h2>
+
+  <div class="fila">
+    <label class="campo">
+      Reporte
+      <select [value]="tipo()" (change)="tipo.set($any($event.target).value)">
+
+        @for (o of opciones; track o.valor) { 
+          <option [value]="o.valor">{{ o.texto }}</option> 
+        }
+      </select>
+    </label>
+
+    @if (esPorPeriodo()) {
+      <label class="campo">
+        {{ tipo() === 'vistas-semana' ? 'Semana del día' : 'Mes del día' }}
+        <input type="date" [value]="referencia()" (change)="referencia.set($any($event.target).value)" />
+      </label>
+
+    } @else {
+      <label class="campo">
+        Desde
+        <input type="date" [value]="desde()" (change)="desde.set($any($event.target).value)" />
+      </label>
+
+      <label class="campo">
+        Hasta
+        <input type="date" [value]="hasta()" (change)="hasta.set($any($event.target).value)" />
+      </label>
+
+      <button type="button" class="boton secundario" (click)="setRango(haceDias30, hoyIso)">Últimos 30 días</button>
+      <button type="button" class="boton secundario" (click)="esteMes()">Este mes</button>
+    }
+  </div>
+
+  <p class="texto">Período: {{ textoPeriodo() }}. Las ventas canceladas no se cuentan.</p>
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  @if (cargando()) {
+    <p class="vacio">Generando reporte...</p>
+  } @else if (tabla(); as t) {
+    <div class="botones">
+      <button type="button" class="boton" (click)="exportar('pdf')" [disabled]="t.filas.length === 0">Exportar PDF</button>
+      <button type="button" class="boton" (click)="exportar('excel')" [disabled]="t.filas.length === 0">Exportar Excel</button>
+    </div>
+
+    <div class="scroll">
+      <table class="tabla">
+        <caption>{{ t.titulo }}</caption>
+        <thead>
+          <tr>
+            @for (c of t.columnas; track c.titulo) { 
+              <th [class.num]="c.tipo === 'entero' || c.tipo === 'moneda'">
+                {{ c.titulo }}
+              </th> 
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (fila of t.filas; track $index) {
+            <tr>
+              @for (c of t.columnas; track c.titulo; let i = $index) { 
+                <td [class.num]="c.tipo === 'entero' || c.tipo === 'moneda'">
+                  {{ formatear(fila[i], c.tipo) }}
+                </td> 
+              }
+            </tr>
+          } @empty {
+            <tr><td [attr.colspan]="t.columnas.length" class="vacio">No hay datos en este período.</td></tr>
+          }
+        </tbody>
+
+        @if (t.totales; as totales) {
+          <tfoot>
+            <tr>
+              @for (c of t.columnas; track c.titulo; let i = $index) { 
+                <th [class.num]="c.tipo === 'entero' || c.tipo === 'moneda'">
+                  {{ formatear(totales[i], c.tipo) }}
+                </th> 
+              }
+            </tr>
+          </tfoot>
+        }
+      </table>
+    </div>
+  }
+</section>
