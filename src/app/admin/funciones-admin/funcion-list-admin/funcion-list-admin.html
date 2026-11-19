@@ -1,0 +1,59 @@
+<section class="pagina">
+  <a class="texto" routerLink="/admin/peliculas">← Volver a películas</a>
+
+  <div class="botones">
+    <h2 class="titulo">Funciones de {{ pelicula()?.nombre ?? 'la película' }}</h2>
+    <a class="boton" [routerLink]="['/admin/funciones', peliculaId(), 'nueva']">Crear función</a>
+  </div>
+
+  @if (error(); as mensaje) {
+    <p class="error">{{ mensaje }}</p>
+  }
+
+  @if (resultado(); as r) {
+    <div class="caja">
+      <strong>Función cancelada.</strong>
+      {{ r.registradas }} compra(s) registrada(s) con crédito por {{ r.total | precioArs }}.
+      {{ r.anonimas }} compra(s) anónima(s) para atender en persona.
+      <button type="button" class="boton secundario" (click)="resultado.set(null)">Cerrar</button>
+    </div>
+  }
+
+  @if (panelAnonimas(); as panel) {
+    <div class="caja">
+      <h3>Compras anónimas — función del {{ panel.titulo }}</h3>
+      <p class="texto">No tienen cuenta donde recibir crédito: deben acercarse a administración con su código.</p>
+
+      <ul class="lista">
+        @for (c of panel.compras; track c.ventaId) {
+          <li>
+            <div class="meta">
+              <strong>{{ c.qr }}</strong>
+              <small>{{ c.fecha | fechaPipe }} · {{ c.entradas }} entradas · {{ c.total | precioArs }}</small>
+            </div>
+          </li>
+        } @empty {
+          <li class="vacio">Esta función no tenía compras anónimas.</li>
+        }
+      </ul>
+
+      <button type="button" class="boton secundario" (click)="panelAnonimas.set(null)">Cerrar</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <p class="vacio">Cargando funciones...</p>
+  } @else {
+    <div class="grid">
+      @for (f of funciones(); track f.id) {
+        <app-funcion-card-admin
+          [funcion]="f"
+          (onBorrarError)="error.set($event)"
+          (cancelar)="cancelarFuncion($event)"
+          (verAnonimas)="verAnonimas($event)" />
+      } @empty {
+        <p class="vacio">Esta película todavía no tiene funciones.</p>
+      }
+    </div>
+  }
+</section>
