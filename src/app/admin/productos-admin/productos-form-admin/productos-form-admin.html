@@ -1,0 +1,102 @@
+<section class="pagina">
+  <h2 class="titulo">Productos</h2>
+
+  @if (categoriaStore.categorias().length === 0) {
+    <p class="texto">Primero creá al menos una <a routerLink="/admin/candy/categorias">categoría</a>.</p>
+  }
+
+  <form [formRoot]="productoForm" class="form">
+
+    <label class="campo">
+      Categoría
+      <select [formField]="productoForm.categoriaId">
+        <option value="">Elegí una categoría</option>
+
+        @for (c of categoriaStore.categorias(); track c.id) { 
+          <option [value]="c.id">{{ c.nombre }}</option> 
+        }
+
+      </select>
+    </label>
+    
+    @if (productoForm.categoriaId().touched()) {
+      @for (e of productoForm.categoriaId().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    <label class="campo">
+      Nombre
+      <input type="text" [formField]="productoForm.nombre" />
+    </label>
+
+    @if (productoForm.nombre().touched()) {
+      @for (e of productoForm.nombre().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    <label class="campo">
+      Precio
+      <input type="number" [formField]="productoForm.precio" />
+    </label>
+
+    @if (productoForm.precio().touched()) {
+      @for (e of productoForm.precio().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    <label class="campo">
+      Imagen
+      <input type="file" accept="image/jpeg,image/png,image/webp" (change)="alElegirImagen($event)" />
+    </label>
+
+    @if (subiendo()) { 
+      <p class="texto">Subiendo imagen...</p> 
+    }
+
+    @if (errorImagen(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+    
+    @if (productoForm.imagenUrl().value(); as url) { 
+      <img class="preview" [src]="url" alt="Vista previa" /> 
+    }
+
+    @if (error(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+    <div class="botones">
+      <button class="boton" type="submit" [disabled]="subiendo()">{{ editandoId() === null ? 'Agregar producto' : 'Guardar cambios' }}</button>
+
+      @if (editandoId() !== null) { 
+        <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button> 
+      }
+    </div>
+  </form>
+
+  <div class="grid">
+    @for (p of store.productos(); track p.id) {
+
+      <article class="caja" [class.apagado]="!p.activo">
+
+        @if (p.imagenUrl) { 
+          <img [src]="p.imagenUrl" [alt]="p.nombre" /> 
+        }
+
+        <h3>{{ p.nombre }} @if (!p.activo) { <small>(inactivo)</small> }</h3>
+
+        <p class="texto">{{ nombreCategoria(p.categoriaId) }} · {{ p.precio | precioArs }}</p>
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(p)">Editar</button>
+          <button type="button" class="boton secundario" (click)="cambiarActivo(p)">{{ p.activo ? 'Desactivar' : 'Activar' }}</button>
+          <button type="button" class="boton peligro" (click)="eliminar(p)">Eliminar</button>
+        </div>
+      </article>
+    } @empty {
+      <p class="vacio">Todavía no hay productos.</p>
+    }
+  </div>
+</section>
