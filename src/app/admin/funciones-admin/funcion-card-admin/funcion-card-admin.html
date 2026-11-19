@@ -1,0 +1,29 @@
+<article class="caja" [class.apagado]="funcion().cancelada">
+  <div class="meta">
+    <strong>
+      {{ funcion().fechaHoraInicio | fechaPipe: false }} · {{ funcion().fechaHoraInicio | date: 'HH:mm' }}
+    </strong>
+
+    <small>
+      {{ sala()?.nombreSala ?? 'Sala ' + funcion().salaId }} · {{ funcion().formato }} · {{ funcion().idioma }}
+    </small>
+  </div>
+
+  <p class="texto">{{ funcion().precio | precioArs }}</p>
+
+  @if (funcion().cancelada) {
+    <span class="badge badge-danger">Cancelada</span>
+  }
+
+  <div class="botones">
+    @if (puedeCancelar()) {
+      <button type="button" class="boton secundario" (click)="cancelar.emit(funcion())">Cancelar función</button>
+    }
+
+    @if (funcion().cancelada) {
+      <button type="button" class="boton secundario" (click)="verAnonimas.emit(funcion())">Compras anónimas</button>
+    }
+    
+    <button type="button" class="boton peligro" (click)="borrarFuncion(funcion().id)">Eliminar</button>
+  </div>
+</article>
