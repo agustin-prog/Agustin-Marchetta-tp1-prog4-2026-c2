@@ -1,0 +1,54 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Log de actividad</h2>
+
+  <div class="fila">
+    <label class="campo">Desde
+      <input type="date" [value]="desde()" (change)="desde.set($any($event.target).value)" />
+    </label>
+    <label class="campo">Hasta
+      <input type="date" [value]="hasta()" (change)="hasta.set($any($event.target).value)" />
+    </label>
+    <label class="campo">Buscar
+      <input type="text" placeholder="Acción o detalle" [value]="texto()" (input)="texto.set($any($event.target).value)" (keydown.enter)="buscar()" />
+    </label>
+    <button type="button" class="boton" (click)="buscar()">Buscar</button>
+  </div>
+
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  @if (registros(); as lista) {
+    <p class="texto">{{ lista.length }} registros.</p>
+
+    <div class="scroll">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Usuario</th>
+            <th>Acción</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (r of lista; track r.id) {
+            <tr>
+              <td>{{ r.fecha | date:'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha | date:'HH:mm:ss' }}</td>
+              <td>{{ r.usuario }} @if (r.rol) { <small>({{ r.rol }})</small> }</td>
+              <td>{{ r.accion }}</td>
+              <td>{{ r.detalle }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="vacio">No hay registros con esos filtros.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="vacio">Cargando registros...</p>
+  }
+</section>
