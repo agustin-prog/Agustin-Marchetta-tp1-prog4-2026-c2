@@ -4,7 +4,7 @@ import { PeliculaForm } from './admin/peliculas-admin/pelicula-form/pelicula-for
 import { PeliculaList } from './peliculas/pelicula-list/pelicula-list';
 import { CuentaLogin } from './cuenta/login/login';
 import { CuentaRegistro } from './cuenta/registro/registro';
-import { ButacasGrid } from './butacas/butacas-grid/butacas-grid';
+import { VistaSeleccionButacas } from './butacas/vista-seleccion-butacas/vista-seleccion-butacas';
 import { Confirmacion } from './compra/confirmacion/confirmacion/confirmacion';
 import { permisoGuard } from './auth/auth.admin';
 import { PeliculaListAdmin } from './admin/peliculas-admin/pelicula-list-admin/pelicula-list-admin';
@@ -25,7 +25,6 @@ import { CuentaPerfil } from './cuenta/perfil/perfil/perfil';
 import { CuentaPuntos } from './cuenta/puntos/puntos/puntos';
 import { CuentaMisPeliculas } from './cuenta/mis-peliculas/mis-peliculas/mis-peliculas';
 import { SalaListAdmin } from './admin/salas-admin/sala-list-admin/sala-list-admin';
-import { SalaButacasAdmin } from './admin/salas-admin/sala-butacas-admin/sala-butacas-admin';
 import { PromocionesNavAdmin } from './admin/promociones-admin/promociones-nav-admin/promociones-nav-admin';
 import { CuponesFormAdmin } from './admin/cupones-admin/cupones-form-admin/cupones-form-admin';
 import { RecompensasFormAdmin } from './admin/recompensas-admin/recompensas-form-admin/recompensas-form-admin';
@@ -45,7 +44,7 @@ export const routes: Routes = [
     { path: 'proximamente', component: Proximamente },
     { path: 'cuenta/historial', component: Historial },
     { path: 'peliculas/:peliculaId', component: PeliculaDetail },
-    { path: 'funcion/:funcionId/butacas', component: ButacasGrid },
+    { path: 'funcion/:funcionId/butacas', component: VistaSeleccionButacas },
     { path: 'funcion/:funcionId/candy', component: CandyCompra },
     { path: 'compra/confirmacion/:qr', component: Confirmacion },
     { path: 'funcion/:funcionId/pago', component: PagoCompra },
@@ -79,7 +78,6 @@ export const routes: Routes = [
         ],
     },
     { path: 'admin/salas', component: SalaListAdmin, canMatch: [permisoGuard('salas')] },
-    { path: 'admin/salas/:salaId/butacas', component: SalaButacasAdmin, canMatch: [permisoGuard('salas')] },
     { path: 'admin/promociones', component: PromocionesNavAdmin, canMatch: [permisoGuard('cupones', 'fidelizacion')],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'cupones' },
