@@ -1,12 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, maxLength, required, min } from '@angular/forms/signals';
-import { RouterLink } from '@angular/router';
-import { ProductoStore } from '../../../candy/producto.store';
-import { CategoriaStore } from '../../../candy/categoria.store';
-import { ImagenStore } from '../../../storage/imagen.store';
-import { mensajeDeError } from '../../../shared/errores';
-import { ProductoModel } from '../../../candy/candy.model';
-import { PrecioArsPipe } from '../../../pipes/pipe-precio-ars/precio-ars-pipe';
+import { Component, inject, signal } from "@angular/core";
+import { form, FormField, FormRoot, maxLength, required, min } from "@angular/forms/signals";
+import { RouterLink } from "@angular/router";
+import { ProductoStore } from "../../../candy/producto.store";
+import { CategoriaStore } from "../../../candy/categoria.store";
+import { ImagenStore } from "../../../storage/imagen.store";
+import { mensajeDeError } from "../../../shared/errores";
+import { ProductoModel } from "../../../candy/candy.model";
+import { PrecioArsPipe } from "../../../pipes/pipe-precio-ars/precio-ars-pipe";
 
 @Component({
   imports: [FormField, FormRoot, RouterLink, PrecioArsPipe],
@@ -16,26 +16,26 @@ import { PrecioArsPipe } from '../../../pipes/pipe-precio-ars/precio-ars-pipe';
 })
 export class ProductosFormAdmin {
 
-  // stores inyectados
   protected readonly store = inject(ProductoStore);
   protected readonly categoriaStore = inject(CategoriaStore);
   private readonly imagenStore = inject(ImagenStore);
 
-  // signals de estado
   protected readonly editandoId = signal<number | null>(null);
   protected readonly error = signal<string | null>(null);
   protected readonly subiendo = signal(false);
   protected readonly errorImagen = signal<string | null>(null);
 
-  private readonly formularioVacio = { categoriaId: '', nombre: '', precio: 0, imagenUrl: '' };
+  private readonly formularioVacio = { categoriaId: "", nombre: "", precio: 0, imagenUrl: "" };
   private readonly datosProducto = signal({ ...this.formularioVacio });
 
-  // form
   protected readonly productoForm = form(this.datosProducto, (campo) => {
-    required(campo.categoriaId, { message: 'Elegí una categoría' });
-    required(campo.nombre, { message: 'El nombre es obligatorio' });
-    maxLength(campo.nombre, 60, { message: 'Máximo 60 caracteres' });
-    min(campo.precio, 1, { message: 'El precio debe ser mayor a 0' });
+    required(campo.categoriaId, { message: "Elegí una categoría" });
+
+    required(campo.nombre, { message: "El nombre es obligatorio" });
+
+    maxLength(campo.nombre, 60, { message: "Máximo 60 caracteres" });
+
+    min(campo.precio, 1, { message: "El precio debe ser mayor a 0" });
   },
   {
     submission: {
@@ -55,15 +55,14 @@ export class ProductosFormAdmin {
 
           this.limpiar();
         } catch (error) {
-          this.error.set(mensajeDeError(error, 'No se pudo guardar el producto.'));
+          this.error.set(mensajeDeError(error, "No se pudo guardar el producto."));
         }
       },
     },
   });
 
-  // métodos públicos
   protected nombreCategoria(id: number): string {
-    return this.categoriaStore.categorias().find((c) => c.id === id)?.nombre ?? '';
+    return this.categoriaStore.categorias().find((c) => c.id === id)?.nombre ?? "";
   }
 
   protected editar(p: ProductoModel) {
@@ -86,11 +85,11 @@ export class ProductosFormAdmin {
     this.subiendo.set(true);
     this.errorImagen.set(null);
     try {
-      const url = await this.imagenStore.subir('productos', archivo);
+      const url = await this.imagenStore.subir("productos", archivo);
       this.datosProducto.update((m) => ({ ...m, imagenUrl: url }));
     } catch (error) {
-      this.errorImagen.set(mensajeDeError(error, 'No se pudo subir la imagen.'));
-      input.value = '';
+      this.errorImagen.set(mensajeDeError(error, "No se pudo subir la imagen."));
+      input.value = "";
     } finally {
       this.subiendo.set(false);
     }
