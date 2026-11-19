@@ -1,0 +1,50 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Propuestas de películas</h2>
+
+  <div class="fila">
+    <label class="campo">Estado
+      <select (change)="cambiarFiltro($any($event.target).value)">
+        <option value="pendiente" [selected]="filtro() === 'pendiente'">Pendientes</option>
+        <option value="aceptada" [selected]="filtro() === 'aceptada'">Aceptadas</option>
+        <option value="rechazada" [selected]="filtro() === 'rechazada'">Rechazadas</option>
+        <option value="todas" [selected]="filtro() === 'todas'">Todas</option>
+      </select>
+    </label>
+  </div>
+
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  @if (aviso(); as mensaje) { 
+    <p class="texto">{{ mensaje }}</p> 
+  }
+
+  @if (propuestas(); as lista) {
+
+    <div class="grid">
+      @for (p of lista; track p.id) {
+
+        <article class="caja propuesta">
+          <h3>{{ p.titulo }}</h3>
+          <p class="meta">{{ p.cliente }} · {{ p.fecha | fechaPipe }} · {{ p.estado }}</p>
+          <p>{{ p.descripcion }}</p>
+          <p class="motivo">
+            <strong>Motivo:</strong> {{ p.motivo }}
+          </p>
+
+          @if (p.estado === 'pendiente') {
+            <div class="botones">
+              <button type="button" class="boton" (click)="aceptar(p)">Aceptar</button>
+              <button type="button" class="boton secundario" (click)="rechazar(p)">Rechazar</button>
+            </div>
+          }
+        </article>
+      } @empty {
+        <p class="vacio">No hay propuestas con ese estado.</p>
+      }
+    </div>
+  } @else {
+    <p class="vacio">Cargando propuestas...</p>
+  }
+</section>
