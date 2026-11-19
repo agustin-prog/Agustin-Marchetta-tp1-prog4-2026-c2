@@ -1,0 +1,71 @@
+<section class="pagina">
+  <h2 class="titulo">Recompensas</h2>
+  <p class="texto">Los clientes las canjean con sus puntos (1 punto por cada peso gastado).</p>
+
+  <form [formRoot]="recompensaForm" class="form">
+    <label class="campo">
+      Nombre
+      <input type="text" [formField]="recompensaForm.nombre" />
+    </label>
+    @if (recompensaForm.nombre().touched()) {
+      @for (e of recompensaForm.nombre().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    <label class="campo">
+      Qué se entrega
+
+      <select [formField]="recompensaForm.productoId">
+        <option value="">Una entrada gratis</option>
+
+        @for (p of productoStore.productosActivos(); track p.id) { 
+          <option [value]="p.id">{{ p.nombre }}</option> 
+        }
+      </select>
+    </label>
+
+    <label class="campo">
+      Costo en puntos
+      <input type="number" [formField]="recompensaForm.costoPuntos" />
+    </label>
+
+    @if (recompensaForm.costoPuntos().touched()) {
+      @for (e of recompensaForm.costoPuntos().errors(); track e.kind) { 
+        <p class="error">{{ e.message }}</p> 
+      }
+    }
+
+    @if (error(); as mensaje) { 
+      <p class="error">{{ mensaje }}</p> 
+    }
+
+    <div class="botones">
+      <button class="boton" type="submit">{{ editandoId() === null ? 'Crear recompensa' : 'Guardar cambios' }}</button>
+
+      @if (editandoId() !== null) { 
+        <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button> 
+      }
+    </div>
+  </form>
+
+  <ul class="lista">
+    @for (r of recompensas(); track r.id) {
+      
+      <li [class.apagado]="!r.activa">
+        <div class="meta">
+          <strong>{{ r.nombre }} — {{ r.costoPuntos }} puntos</strong>
+          <small>{{ r.productoId === null ? 'Entrada gratis' : 'Producto: ' + r.productoNombre }}</small>
+        </div>
+        
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(r)">Editar</button>
+          <button type="button" class="boton secundario" (click)="cambiarActiva(r)">{{ r.activa ? 'Desactivar' : 'Activar' }}</button>
+          <button type="button" class="boton peligro" (click)="eliminar(r)">Eliminar</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="vacio">Todavía no hay recompensas.</li>
+    }
+  </ul>
+</section>
