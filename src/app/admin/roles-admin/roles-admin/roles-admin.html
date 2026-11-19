@@ -1,0 +1,143 @@
+<section class="pagina ancho">
+  <h2 class="titulo">Roles</h2>
+
+  <div class="botones">
+    <button type="button" class="boton" [class.activo]="pestana() === 'roles'" (click)="pestana.set('roles')">Roles</button>
+    <button type="button" class="boton" [class.activo]="pestana() === 'usuarios'" (click)="irAUsuarios()">Usuarios</button>
+  </div>
+
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  @if (aviso(); as mensaje) { 
+    <p class="texto">{{ mensaje }}</p> 
+  }
+
+  @if (pestana() === 'roles') {
+    @if (roles(); as lista) {
+
+      <div class="scroll">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Rol</th>
+              <th>Permisos</th>
+              <th class="num">Usuarios</th>
+            </tr>
+            </thead>
+          <tbody>
+            @for (r of lista; track r.id) {
+              <tr>
+                <td>{{ r.nombre }}</td>
+                <td>{{ nombresPermisos(r.permisos) }}</td>
+                <td class="num">{{ r.usuarios }}</td>
+                <td>
+                  <div class="botones">
+                    <button type="button" class="boton secundario" (click)="editar(r)">Editar</button>
+                    <button type="button" class="boton peligro" [disabled]="r.usuarios > 0" (click)="eliminar(r)">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="4" class="vacio">Todavía no hay roles personalizados.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="vacio">Cargando roles...</p>
+    }
+
+    <form class="form form-rol" (submit)="guardar($event)">
+      <h3>{{ editandoId() === null ? 'Crear rol' : 'Editar rol' }}</h3>
+
+      <label class="campo">
+        Nombre
+        <input type="text" maxlength="40" [value]="nombre()" (input)="nombre.set($any($event.target).value)" />
+      </label>
+
+      <div class="caja">
+        <h3>Permisos</h3>
+
+        @for (p of permisos; track p.clave) {
+          <label class="permiso">
+            <input type="checkbox" [checked]="elegidos().includes(p.clave)" (change)="alternar(p.clave)" />
+            <span><strong>{{ p.texto }}</strong> <small>{{ p.detalle }}</small></span>
+          </label>
+        }
+        <p class="texto">La gestión de roles es exclusiva del administrador.</p>
+      </div>
+
+      <div class="botones">
+        <button type="submit" class="boton" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : (editandoId() === null ? 'Crear rol' : 'Guardar cambios') }}
+        </button>
+
+        @if (editandoId() !== null) { 
+          <button type="button" class="boton secundario" (click)="cancelarEdicion()">Cancelar</button> 
+        }
+
+      </div>
+    </form>
+  } @else {
+    
+    <div class="fila">
+
+      <label class="campo">Buscar
+        <input type="text" placeholder="Nombre o email" [value]="texto()" (input)="texto.set($any($event.target).value)" (keydown.enter)="cargarUsuarios()" />
+      </label>
+
+      <button type="button" class="boton" (click)="cargarUsuarios()">Buscar</button>
+    </div>
+
+    @if (usuarios(); as lista) {
+      <div class="scroll">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Rol base</th>
+              <th>Rol personalizado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (u of lista; track u.id) {
+              <tr>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                  <select (change)="cambiarBase(u, $any($event.target).value)">
+                    <option value="cliente" [selected]="u.rol === 'cliente'">Cliente</option>
+                    <option value="empleado" [selected]="u.rol === 'empleado'">Empleado</option>
+                    <option value="admin" [selected]="u.rol === 'admin'">Administrador</option>
+                  </select>
+                </td>
+                <td>
+                  @if (u.rol === 'admin') {
+                    <small>Todos los permisos</small>
+                  } @else {
+                    <select (change)="cambiarPersonalizado(u, $any($event.target).value)">
+                      <option value="" [selected]="u.rolId === null">— Ninguno —</option>
+                      
+                      @for (r of roles() ?? []; track r.id) { 
+                        <option [value]="r.id" [selected]="r.id === u.rolId">{{ r.nombre }}</option> 
+                      }
+
+                    </select>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="4" class="vacio">No se encontraron usuarios.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="vacio">Cargando usuarios...</p>
+    }
+  }
+</section>
