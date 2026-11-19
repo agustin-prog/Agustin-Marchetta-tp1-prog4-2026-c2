@@ -1,0 +1,49 @@
+<section class="pagina">
+  <h2 class="titulo">Salas</h2>
+  <p class="texto">Una sala nueva se crea con la misma estructura de butacas que las demás.</p>
+
+  <form [formRoot]="salaForm" class="form">
+    <label class="campo">
+      Nombre de la sala
+      <input type="text" placeholder="Nombre de la sala" [formField]="salaForm.nombre" />
+    </label>
+
+    <div class="botones">
+      <button class="boton" type="submit">{{ editandoId() === null ? 'Crear sala' : 'Guardar cambios' }}</button>
+      @if (editandoId() !== null) {
+        <button type="button" class="boton secundario" (click)="limpiar()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  @if (salaForm.nombre().touched()) {
+    @for (e of salaForm.nombre().errors(); track e.kind) { 
+      <p class="error">{{ e.message }}</p> 
+    }
+  }
+
+  @if (error(); as mensaje) { 
+    <p class="error">{{ mensaje }}</p> 
+  }
+
+  <ul class="lista">
+    @for (s of store.salas(); track s.id) {
+      <li [class.apagado]="!s.activa">
+        <div class="meta">
+          <strong>{{ s.nombreSala }}</strong>
+          @if (!s.activa) { 
+            <small>(inactiva: no recibe funciones nuevas)</small> 
+          }
+        </div>
+
+        <div class="botones">
+          <button type="button" class="boton secundario" (click)="editar(s)">Renombrar</button>
+          <button type="button" class="boton secundario" (click)="cambiarActiva(s)">{{ s.activa ? 'Desactivar' : 'Activar' }}</button>
+          <button type="button" class="boton peligro" (click)="eliminar(s)">Eliminar</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="vacio">Todavía no hay salas.</li>
+    }
+  </ul>
+</section>
